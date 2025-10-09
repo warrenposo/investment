@@ -86,30 +86,6 @@ const Dashboard = () => {
 
   // Initialize user data from localStorage or URL params
   useEffect(() => {
-    // Clear any existing localStorage data to ensure clean start
-    localStorage.removeItem('valoraUserData');
-    
-    // Default data for new users - no investments yet
-    const defaultUserData = {
-      name: "Welcome User",
-      email: "user@valora-capital.com",
-      totalBalance: 0,
-      totalInvested: 0,
-      totalProfit: 0,
-      activeInvestments: 0,
-      totalWithdrawals: 0
-    };
-    setUserData(defaultUserData);
-    setSettingsData({
-      firstName: "Welcome",
-      lastName: "User",
-      email: "user@valora-capital.com",
-      phone: '+44 123 456 7890',
-      country: 'United Kingdom',
-      notifications: true,
-      twoFactor: false
-    });
-
     // Check KYC status if user is authenticated
     checkKycStatus();
   }, []);
@@ -130,12 +106,12 @@ const Dashboard = () => {
         
         // If admin, redirect to admin dashboard
         if (isAdmin) {
-          console.log('Dashboard - Admin user detected, redirecting to /admin');
+          console.log('Dashboard - Admin user detected from Supabase, redirecting to /admin');
           navigate('/admin');
           return;
         }
         
-        // Set user data
+        // Set user data for regular users
         setUserData({
           name: `${userProfile.first_name} ${userProfile.last_name}`,
           email: currentUser.email,
@@ -150,19 +126,15 @@ const Dashboard = () => {
         const kycStatusData = await KycChecker.canUserDeposit(currentUser.id);
         setKycStatus(kycStatusData);
         
-        // Update localStorage for quick access
-        const userData = {
+        console.log('Supabase user loaded:', {
           id: currentUser.id,
           name: `${userProfile.first_name} ${userProfile.last_name}`,
           email: currentUser.email,
-          isAdmin: isAdmin,
-          role: isAdmin ? 'admin' : 'user'
-        };
-        localStorage.setItem('valoraUserData', JSON.stringify(userData));
-        
-        console.log('Supabase user loaded:', userData);
+          isAdmin: false
+        });
       } else {
         // No Supabase user, redirect to sign in
+        console.log('Dashboard - No authenticated user, redirecting to signin');
         navigate('/signin');
       }
     } catch (error) {
@@ -181,12 +153,10 @@ const Dashboard = () => {
   const handleLogout = async () => {
     try {
       await SupabaseService.signOut();
-      localStorage.removeItem('valoraUserData');
       navigate('/signin');
     } catch (error) {
       console.error('Logout error:', error);
-      // Fallback to localStorage cleanup
-      localStorage.removeItem('valoraUserData');
+      // Even if signOut fails, redirect to signin
       navigate('/signin');
     }
   };

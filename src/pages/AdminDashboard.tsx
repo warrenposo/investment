@@ -17,14 +17,21 @@ import {
   Download
 } from 'lucide-react'
 import KycVerification from '@/components/KycVerification'
+import SupabaseService from '@/services/supabaseService'
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    pendingKyc: 0,
+    verifiedUsers: 0
+  })
 
   useEffect(() => {
     checkAdminAccess()
+    loadStats()
   }, [])
 
   const checkAdminAccess = async () => {
@@ -61,15 +68,36 @@ const AdminDashboard: React.FC = () => {
     }
   }
 
+  const loadStats = async () => {
+    try {
+      // Get all users
+      const allUsers = await SupabaseService.getAllUsers();
+      const totalUsers = allUsers.length;
+      
+      // Get all KYC documents
+      const allKycDocs = await SupabaseService.getAllKycDocuments();
+      const pendingKyc = allKycDocs.filter(doc => doc.status === 'pending').length;
+      
+      // Count verified users (users with approved KYC status)
+      const verifiedUsers = allUsers.filter(user => user.kyc_status === 'approved').length;
+      
+      setStats({
+        totalUsers,
+        pendingKyc,
+        verifiedUsers
+      });
+    } catch (error) {
+      console.error('Error loading stats:', error);
+    }
+  }
+
   const handleLogout = async () => {
     try {
       await SupabaseService.signOut();
-      localStorage.removeItem('valoraUserData');
       navigate('/signin');
     } catch (error) {
       console.error('Logout error:', error);
-      // Fallback to localStorage cleanup
-      localStorage.removeItem('valoraUserData');
+      // Even if signOut fails, redirect to signin
       navigate('/signin');
     }
   }
@@ -141,8 +169,8 @@ const AdminDashboard: React.FC = () => {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1,247</div>
-              <p className="text-xs text-muted-foreground">+12% from last month</p>
+              <div className="text-2xl font-bold">{stats.totalUsers}</div>
+              <p className="text-xs text-muted-foreground">Registered users</p>
             </CardContent>
           </Card>
 
@@ -152,7 +180,7 @@ const AdminDashboard: React.FC = () => {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">23</div>
+              <div className="text-2xl font-bold">{stats.pendingKyc}</div>
               <p className="text-xs text-muted-foreground">Awaiting review</p>
             </CardContent>
           </Card>
@@ -163,14 +191,16 @@ const AdminDashboard: React.FC = () => {
               <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1,089</div>
-              <p className="text-xs text-muted-foreground">87% verification rate</p>
+              <div className="text-2xl font-bold">{stats.verifiedUsers}</div>
+              <p className="text-xs text-muted-foreground">
+                {stats.totalUsers > 0 ? Math.round((stats.verifiedUsers / stats.totalUsers) * 100) : 0}% verification rate
+              </p>
             </CardContent>
           </Card>
         </div>
 
         {/* KYC Verification Component */}
-        <KycVerification />
+        <KycVerification onStatsUpdate={loadStats} />
       </div>
     </div>
   )

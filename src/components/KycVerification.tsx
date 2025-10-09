@@ -38,7 +38,11 @@ interface KycDocument {
   }
 }
 
-const KycVerification: React.FC = () => {
+interface KycVerificationProps {
+  onStatsUpdate?: () => void
+}
+
+const KycVerification: React.FC<KycVerificationProps> = ({ onStatsUpdate }) => {
   const [documents, setDocuments] = useState<KycDocument[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -77,6 +81,10 @@ const KycVerification: React.FC = () => {
       }
       
       await loadDocuments()
+      // Notify parent component to update stats
+      if (onStatsUpdate) {
+        onStatsUpdate()
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to approve document')
     } finally {
@@ -90,6 +98,10 @@ const KycVerification: React.FC = () => {
       await SupabaseService.updateKycDocumentStatus(documentId, 'rejected', reason)
       await SupabaseService.updateUserKycStatus(userId, 'rejected')
       await loadDocuments()
+      // Notify parent component to update stats
+      if (onStatsUpdate) {
+        onStatsUpdate()
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to reject document')
     } finally {

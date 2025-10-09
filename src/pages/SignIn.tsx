@@ -67,32 +67,13 @@ const SignIn = () => {
       // Get user profile from Supabase
       const userProfile = await SupabaseService.getUserProfile(data.user.id);
       
-      // Check if user is admin
+      // Check if user is admin based on email
       const isAdmin = formData.email === 'warrenokumu98@gmail.com';
       
       console.log('SignIn - Email:', formData.email);
       console.log('SignIn - Is admin?', isAdmin);
       
-      // Update user profile with admin status if needed
-      if (isAdmin) {
-        await SupabaseService.updateUserProfile(data.user.id, {
-          first_name: userProfile.first_name || 'Admin',
-          last_name: userProfile.last_name || 'User'
-        });
-      }
-
-      // Store user data in localStorage for quick access
-      const userData = {
-        id: data.user.id,
-        name: `${userProfile.first_name} ${userProfile.last_name}`,
-        email: data.user.email,
-        isAdmin: isAdmin,
-        role: isAdmin ? 'admin' : 'user'
-      };
-      
-      localStorage.setItem('valoraUserData', JSON.stringify(userData));
-      
-      // Navigate based on user role
+      // Navigate based on user role - no localStorage needed
       if (isAdmin) {
         // Admin users go directly to admin dashboard
         console.log('SignIn - Redirecting admin to /admin');

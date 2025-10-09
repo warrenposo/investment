@@ -459,7 +459,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {showBalance ? (userData.totalBalance > 0 ? formatCurrency(userData.totalBalance) : "nil") : "••••••"}
+                {showBalance ? (userData.totalBalance > 0 ? formatCurrency(userData.totalBalance) : "$0.00") : "••••••"}
               </div>
               <div className="flex items-center gap-2 mt-2">
                 <button
@@ -483,7 +483,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {showBalance ? (userData.totalInvested > 0 ? formatCurrency(userData.totalInvested) : "nil") : "••••••"}
+                {showBalance ? (userData.totalInvested > 0 ? formatCurrency(userData.totalInvested) : "$0.00") : "••••••"}
               </div>
               <p className="text-xs text-muted-foreground mt-2">
                 Across {userData.activeInvestments} active plans
@@ -498,7 +498,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">
-                {showBalance ? (userData.totalProfit > 0 ? formatCurrency(userData.totalProfit) : "nil") : "••••••"}
+                {showBalance ? (userData.totalProfit > 0 ? formatCurrency(userData.totalProfit) : "$0.00") : "••••••"}
               </div>
               <p className="text-xs text-green-600 flex items-center gap-1 mt-2">
                 <ArrowUpRight className="w-3 h-3" />
@@ -514,7 +514,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {showBalance ? (userData.totalWithdrawals > 0 ? formatCurrency(userData.totalWithdrawals) : "nil") : "••••••"}
+                {showBalance ? (userData.totalWithdrawals > 0 ? formatCurrency(userData.totalWithdrawals) : "$0.00") : "••••••"}
               </div>
               <p className="text-xs text-muted-foreground mt-2">
                 Available for withdrawal

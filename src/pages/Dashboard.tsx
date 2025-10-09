@@ -153,11 +153,11 @@ const Dashboard = () => {
   const handleLogout = async () => {
     try {
       await SupabaseService.signOut();
-      navigate('/signin');
+      navigate('/');
     } catch (error) {
       console.error('Logout error:', error);
-      // Even if signOut fails, redirect to signin
-      navigate('/signin');
+      // Even if signOut fails, redirect to home page
+      navigate('/');
     }
   };
 

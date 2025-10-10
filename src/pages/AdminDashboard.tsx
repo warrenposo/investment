@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import KycVerification from '@/components/KycVerification'
 import CompanyWalletManager from '@/components/CompanyWalletManager'
+import PaymentManager from '@/components/PaymentManager'
 import SupabaseService from '@/services/supabaseService'
 
 const AdminDashboard: React.FC = () => {
@@ -225,6 +226,16 @@ const AdminDashboard: React.FC = () => {
               >
                 Wallet Management
               </button>
+              <button 
+                onClick={() => setActiveTab('payments')}
+                className={`py-2 px-1 text-sm font-medium border-b-2 ${
+                  activeTab === 'payments' 
+                    ? 'border-primary text-primary' 
+                    : 'border-transparent text-muted-foreground hover:text-muted-foreground hover:border-gray-300'
+                }`}
+              >
+                Payment Management
+              </button>
             </nav>
           </div>
 
@@ -235,6 +246,10 @@ const AdminDashboard: React.FC = () => {
           
           {activeTab === 'wallets' && (
             <CompanyWalletManager />
+          )}
+          
+          {activeTab === 'payments' && (
+            <PaymentManager />
           )}
         </div>
       </div>

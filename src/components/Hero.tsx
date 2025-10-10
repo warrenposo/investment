@@ -2,13 +2,19 @@ import { ChevronRight } from "lucide-react";
 import heroBg from "@/assets/hero-bg.jpg";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  const handleStartInvestment = () => {
+    navigate('/signin');
+  };
 
   return (
     <section 
@@ -25,8 +31,11 @@ const Hero = () => {
         <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
           A Profitable platform for high-margin investment. We accumulate traders like you to leverage investment and make big profits.
         </p>
-        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 rounded-full text-lg hover:scale-105 transition-transform duration-200 hover:shadow-lg">
-          Start Trading Now
+        <Button 
+          onClick={handleStartInvestment}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 rounded-full text-lg hover:scale-105 transition-transform duration-200 hover:shadow-lg"
+        >
+          Start Your Investment
         </Button>
       </div>
 

@@ -142,8 +142,10 @@ const PaymentManager: React.FC = () => {
         return <Bitcoin className="w-5 h-5 text-orange-500" />
       case 'ETH':
         return <Coins className="w-5 h-5 text-blue-500" />
-      case 'USDT':
+      case 'USDT-ERC20':
         return <DollarSign className="w-5 h-5 text-green-500" />
+      case 'USDT-TRC20':
+        return <DollarSign className="w-5 h-5 text-red-500" />
       default:
         return <DollarSign className="w-5 h-5" />
     }

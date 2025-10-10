@@ -95,7 +95,7 @@ export class BlockchainMonitor {
     }
   }
 
-  // Monitor USDT transactions (on Ethereum network)
+  // Monitor USDT transactions (on Ethereum network - ERC-20)
   static async checkUSDTTransactions(address: string): Promise<BlockchainTransaction[]> {
     try {
       // USDT is an ERC-20 token on Ethereum
@@ -136,6 +136,47 @@ export class BlockchainMonitor {
     }
   }
 
+  // Monitor USDT transactions (on TRON network - TRC-20)
+  static async checkTRC20Transactions(address: string): Promise<BlockchainTransaction[]> {
+    try {
+      // USDT TRC-20 contract address on TRON
+      const trc20ContractAddress = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t' // USDT TRC-20 contract
+      
+      // Using TronGrid API (free tier available)
+      const response = await fetch(
+        `https://api.trongrid.io/v1/accounts/${address}/transactions/trc20?contract_address=${trc20ContractAddress}&limit=50`
+      )
+      
+      if (!response.ok) {
+        console.log('TronGrid API limit reached for USDT TRC-20')
+        return []
+      }
+
+      const data = await response.json()
+      const transactions: BlockchainTransaction[] = []
+
+      if (data.data && Array.isArray(data.data)) {
+        for (const tx of data.data) {
+          if (tx.to.toLowerCase() === address.toLowerCase()) {
+            transactions.push({
+              hash: tx.transaction_id,
+              value: parseInt(tx.value), // in USDT (6 decimals)
+              confirmations: tx.confirmed ? 1 : 0,
+              timestamp: tx.block_timestamp,
+              from: tx.from,
+              to: tx.to
+            })
+          }
+        }
+      }
+
+      return transactions
+    } catch (error) {
+      console.error('Error checking USDT TRC-20 transactions:', error)
+      return []
+    }
+  }
+
   // Monitor all company wallet addresses
   static async monitorAllCompanyWallets() {
     try {
@@ -158,8 +199,11 @@ export class BlockchainMonitor {
           case 'ETH':
             transactions = await this.checkEthereumTransactions(wallet.address)
             break
-          case 'USDT':
+          case 'USDT-ERC20':
             transactions = await this.checkUSDTTransactions(wallet.address)
+            break
+          case 'USDT-TRC20':
+            transactions = await this.checkTRC20Transactions(wallet.address)
             break
         }
         

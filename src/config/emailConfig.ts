@@ -21,7 +21,7 @@ export const EMAIL_CONFIG = {
   COMPANY: {
     NAME: import.meta.env.VITE_COMPANY_NAME || 'Valora Capital',
     EMAIL: import.meta.env.VITE_COMPANY_EMAIL || 'info@valora-capital.com',
-    PHONE: import.meta.env.VITE_COMPANY_PHONE || '+44 7848 179386',
+    PHONE: import.meta.env.VITE_COMPANY_PHONE || '+12137274788',
     ADDRESS: import.meta.env.VITE_COMPANY_ADDRESS || 'Guildford, Surrey, United Kingdom',
     WEBSITE: import.meta.env.VITE_COMPANY_WEBSITE || 'https://valora-capital.com',
   }

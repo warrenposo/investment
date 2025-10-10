@@ -15,6 +15,7 @@ import emailService from "@/services/emailService";
 import SupabaseService from "@/services/supabaseService";
 import KycChecker from "@/utils/kycChecker";
 import PaymentService from "@/services/paymentService";
+import QRCodeGenerator from "@/components/QRCodeGenerator";
 import { 
   TrendingUp, 
   DollarSign, 
@@ -48,6 +49,8 @@ const Dashboard = () => {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showDepositModal, setShowDepositModal] = useState(false);
+  const [showInvestModal, setShowInvestModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState({ id: '', name: '', minAmount: 0 });
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [withdrawMethod, setWithdrawMethod] = useState("");
   const [withdrawAccount, setWithdrawAccount] = useState("");
@@ -246,7 +249,15 @@ const Dashboard = () => {
     }, 1000);
   };
 
-  const handleInvestNow = async (planId: string, planName: string) => {
+  const handleInvestNow = async (planId: string, planName: string, minAmount: number) => {
+    // Check if user has sufficient balance
+    if (userData.totalBalance < minAmount) {
+      // Show modal asking user to make deposit first
+      setSelectedPlan({ id: planId, name: planName, minAmount });
+      setShowInvestModal(true);
+      return;
+    }
+
     try {
       // Generate a transaction ID
       const transactionId = `INV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -1008,7 +1019,7 @@ const Dashboard = () => {
                           ? 'bg-primary hover:bg-primary/90' 
                           : 'bg-secondary hover:bg-secondary/80'
                       }`}
-                      onClick={() => handleInvestNow(plan.id, plan.name)}
+                      onClick={() => handleInvestNow(plan.id, plan.name, plan.minAmount)}
                     >
                       Invest Now
                     </Button>
@@ -1243,10 +1254,16 @@ const Dashboard = () => {
                         Ethereum (ETH)
                       </div>
                     </SelectItem>
-                    <SelectItem value="usdt">
+                    <SelectItem value="usdt-erc20">
                       <div className="flex items-center gap-2">
                         <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                        Tether (USDT)
+                        USDT (ERC-20)
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="usdt-trc20">
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+                        USDT (TRC-20)
                       </div>
                     </SelectItem>
                     <SelectItem value="card">
@@ -1266,13 +1283,14 @@ const Dashboard = () => {
               </div>
 
               {/* Cryptocurrency Payment Section */}
-              {depositMethod && ['bitcoin', 'ethereum', 'usdt'].includes(depositMethod) && (
+              {depositMethod && ['bitcoin', 'ethereum', 'usdt-erc20', 'usdt-trc20'].includes(depositMethod) && (
                 <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
                   <div className="text-center">
                     <h3 className="font-semibold mb-2">
                       {depositMethod === 'bitcoin' && 'Bitcoin Payment'}
                       {depositMethod === 'ethereum' && 'Ethereum Payment'}
-                      {depositMethod === 'usdt' && 'USDT Payment'}
+                      {depositMethod === 'usdt-erc20' && 'USDT Payment (ERC-20)'}
+                      {depositMethod === 'usdt-trc20' && 'USDT Payment (TRC-20)'}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
                       Send your payment to the address below
@@ -1296,9 +1314,10 @@ const Dashboard = () => {
                     <div className="flex items-center gap-2 mt-1">
                       <Input
                         value={
-                          depositMethod === 'bitcoin' ? '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa' :
-                          depositMethod === 'ethereum' ? '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6' :
-                          'TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE'
+                          depositMethod === 'bitcoin' ? '163JAzy3CEz8YoNGDDtu9KxpXgnm5Kn9Rs' :
+                          depositMethod === 'ethereum' ? '0x8c0fd3fdc6f56e658fb1bffa8f5ddd65388ba690' :
+                          depositMethod === 'usdt-erc20' ? '0x8c0fd3fdc6f56e658fb1bffa8f5ddd65388ba690' :
+                          'THaAnBqAvQ3YY751nXqNDzCoczYVQtBKnP'
                         }
                         readOnly
                         className="font-mono text-sm"
@@ -1308,13 +1327,29 @@ const Dashboard = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => copyToClipboard(
-                          depositMethod === 'bitcoin' ? '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa' :
-                          depositMethod === 'ethereum' ? '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6' :
-                          'TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE'
+                          depositMethod === 'bitcoin' ? '163JAzy3CEz8YoNGDDtu9KxpXgnm5Kn9Rs' :
+                          depositMethod === 'ethereum' ? '0x8c0fd3fdc6f56e658fb1bffa8f5ddd65388ba690' :
+                          depositMethod === 'usdt-erc20' ? '0x8c0fd3fdc6f56e658fb1bffa8f5ddd65388ba690' :
+                          'THaAnBqAvQ3YY751nXqNDzCoczYVQtBKnP'
                         )}
                       >
                         <Copy className="w-4 h-4" />
                       </Button>
+                      <QRCodeGenerator
+                        address={
+                          depositMethod === 'bitcoin' ? '163JAzy3CEz8YoNGDDtu9KxpXgnm5Kn9Rs' :
+                          depositMethod === 'ethereum' ? '0x8c0fd3fdc6f56e658fb1bffa8f5ddd65388ba690' :
+                          depositMethod === 'usdt-erc20' ? '0x8c0fd3fdc6f56e658fb1bffa8f5ddd65388ba690' :
+                          'THaAnBqAvQ3YY751nXqNDzCoczYVQtBKnP'
+                        }
+                        currency={
+                          depositMethod === 'bitcoin' ? 'BTC' :
+                          depositMethod === 'ethereum' ? 'ETH' :
+                          depositMethod === 'usdt-erc20' ? 'USDT-ERC20' :
+                          'USDT-TRC20'
+                        }
+                        amount={depositAmount}
+                      />
                     </div>
                   </div>
 
@@ -1324,7 +1359,12 @@ const Dashboard = () => {
                     <ul className="list-disc list-inside space-y-1 ml-4">
                       <li>Send only {depositMethod.toUpperCase()} to this address</li>
                       <li>Minimum amount: $100 USD equivalent</li>
-                      <li>Network: {depositMethod === 'bitcoin' ? 'Bitcoin' : depositMethod === 'ethereum' ? 'Ethereum (ERC-20)' : 'TRON (TRC-20)'}</li>
+                      <li>Network: {
+                        depositMethod === 'bitcoin' ? 'Bitcoin' : 
+                        depositMethod === 'ethereum' ? 'Ethereum' : 
+                        depositMethod === 'usdt-erc20' ? 'Ethereum (ERC-20)' : 
+                        'TRON (TRC-20)'
+                      }</li>
                       <li>Processing time: 10-30 minutes</li>
                       <li>Do not send other cryptocurrencies to this address</li>
                     </ul>
@@ -1404,6 +1444,130 @@ const Dashboard = () => {
                 </Button>
               </div>
             </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Investment Modal */}
+        <Dialog open={showInvestModal} onOpenChange={setShowInvestModal}>
+          <DialogContent className="max-w-lg bg-card border-border">
+            <DialogHeader className="space-y-3">
+              <div className="flex items-center justify-between">
+                <DialogTitle className="text-xl font-bold text-foreground">
+                  Investment Required
+                </DialogTitle>
+                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
+                  <AlertCircle className="w-4 h-4 text-orange-600" />
+                </div>
+              </div>
+              <DialogDescription className="text-muted-foreground">
+                You need to make a deposit before you can invest in this plan.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-6">
+              {/* Plan Information Card */}
+              <Card className="bg-muted/50 border-border">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg font-semibold text-foreground">
+                      {selectedPlan.name}
+                    </CardTitle>
+                    <Badge variant="secondary" className="bg-orange-100 text-orange-800">
+                      <Target className="w-3 h-3 mr-1" />
+                      Selected Plan
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <p className="text-sm text-muted-foreground">Minimum Required</p>
+                      <p className="text-lg font-bold text-orange-600">
+                        ${selectedPlan.minAmount.toLocaleString()}
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm text-muted-foreground">Your Balance</p>
+                      <p className="text-lg font-bold text-green-600">
+                        ${userData.totalBalance.toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="p-3 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="w-4 h-4 text-orange-600" />
+                      <span className="font-semibold text-orange-800 dark:text-orange-200">
+                        Insufficient Balance
+                      </span>
+                    </div>
+                    <p className="text-sm text-orange-700 dark:text-orange-300">
+                      You need to deposit at least{' '}
+                      <span className="font-bold">
+                        ${(selectedPlan.minAmount - userData.totalBalance).toLocaleString()}
+                      </span>{' '}
+                      more to invest in this plan.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Action Buttons */}
+              <div className="space-y-3">
+                <Button
+                  onClick={() => {
+                    setShowInvestModal(false);
+                    setShowDepositModal(true);
+                  }}
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 text-lg font-semibold"
+                >
+                  <Plus className="w-5 h-5 mr-2" />
+                  Make Deposit Now
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  onClick={() => setShowInvestModal(false)}
+                  className="w-full py-3 text-lg font-semibold border-border hover:bg-muted"
+                >
+                  Cancel
+                </Button>
+              </div>
+
+              {/* Information Footer */}
+              <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/20 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-foreground">Next Steps</h4>
+                    <div className="text-sm text-muted-foreground space-y-1">
+                      <p>• Make a deposit using any supported payment method</p>
+                      <p>• Your funds will be available immediately after confirmation</p>
+                      <p>• Return to this plan to complete your investment</p>
+                      <p>• Start earning returns from day one</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Stats */}
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground">Deposit Methods</p>
+                  <p className="text-sm font-semibold text-foreground">4+ Available</p>
+                </div>
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground">Processing Time</p>
+                  <p className="text-sm font-semibold text-foreground">Instant</p>
+                </div>
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground">Minimum</p>
+                  <p className="text-sm font-semibold text-foreground">$100</p>
+                </div>
+              </div>
+            </div>
           </DialogContent>
         </Dialog>
       </div>

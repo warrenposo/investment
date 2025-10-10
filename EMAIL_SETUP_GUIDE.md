@@ -147,7 +147,7 @@ REACT_APP_EMAILJS_PUBLIC_KEY=your_public_key_here
 # Company Information
 REACT_APP_COMPANY_NAME=Valora Capital
 REACT_APP_COMPANY_EMAIL=info@valora-capital.com
-REACT_APP_COMPANY_PHONE=+44 7848 179386
+REACT_APP_COMPANY_PHONE=+12137274788
 REACT_APP_COMPANY_ADDRESS=Guildford, Surrey, United Kingdom
 ```
 

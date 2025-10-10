@@ -39,7 +39,7 @@ export class PaymentService {
   }
 
   // Get company wallet address for currency
-  static async getCompanyWalletAddress(currency: 'BTC' | 'ETH' | 'USDT'): Promise<{id: string, address: string, walletName: string}> {
+  static async getCompanyWalletAddress(currency: 'BTC' | 'ETH' | 'USDT-ERC20' | 'USDT-TRC20'): Promise<{id: string, address: string, walletName: string}> {
     const wallets = await SupabaseService.getCompanyWallets()
     const wallet = wallets.find(w => w.currency === currency)
     
@@ -57,7 +57,7 @@ export class PaymentService {
   // Create payment request using company wallet
   static async createPaymentRequest(
     userId: string,
-    currency: 'BTC' | 'ETH' | 'USDT',
+    currency: 'BTC' | 'ETH' | 'USDT-ERC20' | 'USDT-TRC20',
     amount: number
   ) {
     const prices = await this.getCryptoPrices()
@@ -66,7 +66,16 @@ export class PaymentService {
     const companyWallet = await this.getCompanyWalletAddress(currency)
     
     // Calculate crypto amount needed
-    const cryptoAmount = amount / prices[currency.toLowerCase() as keyof CryptoPrice].usd
+    let cryptoAmount: number
+    if (currency === 'BTC') {
+      cryptoAmount = amount / prices.bitcoin.usd
+    } else if (currency === 'ETH') {
+      cryptoAmount = amount / prices.ethereum.usd
+    } else if (currency === 'USDT-ERC20' || currency === 'USDT-TRC20') {
+      cryptoAmount = amount / prices.tether.usd
+    } else {
+      throw new Error(`Unsupported currency: ${currency}`)
+    }
     
     // Generate unique user reference for tracking
     const userReference = `VC${Date.now()}${userId.slice(-6).toUpperCase()}`

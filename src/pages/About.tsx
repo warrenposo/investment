@@ -479,7 +479,7 @@ const About = () => {
                 <Phone className="w-10 h-10 text-primary" />
               </div>
               <h3 className="text-xl font-bold mb-4">Phone</h3>
-              <p className="text-muted-foreground mb-2">+44 7848 179386</p>
+              <p className="text-muted-foreground mb-2">+12137274788</p>
               <p className="text-sm text-muted-foreground">24/7 Support Available</p>
             </div>
             

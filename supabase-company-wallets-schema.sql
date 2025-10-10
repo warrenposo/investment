@@ -4,7 +4,7 @@
 -- Company wallet addresses (admin managed)
 CREATE TABLE IF NOT EXISTS company_wallets (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  currency VARCHAR(10) NOT NULL UNIQUE, -- 'BTC', 'ETH', 'USDT'
+  currency VARCHAR(15) NOT NULL UNIQUE, -- 'BTC', 'ETH', 'USDT-ERC20', 'USDT-TRC20'
   address VARCHAR(255) NOT NULL,
   wallet_name VARCHAR(100) NOT NULL, -- e.g., 'Main Bitcoin Wallet', 'Ethereum Hot Wallet'
   is_active BOOLEAN DEFAULT true,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS user_payment_tracking (
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   payment_request_id UUID REFERENCES payment_requests(id) ON DELETE CASCADE,
   company_wallet_id UUID REFERENCES company_wallets(id),
-  currency VARCHAR(10) NOT NULL,
+  currency VARCHAR(15) NOT NULL,
   requested_amount DECIMAL(10,2) NOT NULL, -- USD amount user requested
   crypto_amount DECIMAL(20,8) NOT NULL, -- Crypto amount user should send
   company_address VARCHAR(255) NOT NULL, -- Company wallet address

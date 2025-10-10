@@ -107,7 +107,7 @@ const faqCategories = [
     questions: [
       {
         question: "What customer support services does Valora Capital provide?",
-        answer: "We provide comprehensive 24/7 customer support through multiple channels: Live chat (instant response), Email support (response within 2 hours), Phone support (+44 7848 179386), WhatsApp support, and Video call consultations for premium clients. Our multilingual support team speaks English, Spanish, French, German, Italian, Portuguese, and Arabic. We also offer dedicated account managers for Professional and Premium plan holders, providing personalized investment guidance and priority support."
+        answer: "We provide comprehensive 24/7 customer support through multiple channels: Live chat (instant response), Email support (response within 2 hours), Phone support (+12137274788), WhatsApp support, and Video call consultations for premium clients. Our multilingual support team speaks English, Spanish, French, German, Italian, Portuguese, and Arabic. We also offer dedicated account managers for Professional and Premium plan holders, providing personalized investment guidance and priority support."
       },
       {
         question: "Do you provide educational resources and trading insights?",
@@ -119,7 +119,7 @@ const faqCategories = [
       },
       {
         question: "How can I contact Valora Capital for urgent matters?",
-        answer: "For urgent matters, we recommend using our priority support channels: Phone: +44 7848 179386 (24/7), WhatsApp: +44 7848 179386 (instant messaging), Live chat on our website (immediate response), or Email: info@valora-capital.com (marked as 'URGENT'). Premium plan holders have access to a dedicated emergency hotline for immediate assistance. Our support team is trained to handle all types of inquiries, from technical issues to investment questions, ensuring you receive the help you need when you need it."
+        answer: "For urgent matters, we recommend using our priority support channels: Phone: +12137274788 (24/7), WhatsApp: +12137274788 (instant messaging), Live chat on our website (immediate response), or Email: info@valora-capital.com (marked as 'URGENT'). Premium plan holders have access to a dedicated emergency hotline for immediate assistance. Our support team is trained to handle all types of inquiries, from technical issues to investment questions, ensuring you receive the help you need when you need it."
       }
     ]
   }

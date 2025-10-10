@@ -13,8 +13,6 @@ import {
   Users, 
   DollarSign, 
   BarChart3, 
-  CheckCircle, 
-  Star,
   ArrowRight,
   Phone,
   Mail,
@@ -41,125 +39,6 @@ const Index = () => {
       <Features />
       <FloatingPhone />
       
-      {/* Investment Plans Preview */}
-      <section className="py-20 px-6 bg-card">
-        <div className="container mx-auto max-w-6xl">
-          <div className={`text-center mb-16 transition-all duration-1000 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}>
-            <p className="text-primary text-sm font-semibold tracking-wider uppercase mb-3">
-              INVESTMENT PLANS
-            </p>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Choose Your Investment Plan
-            </h2>
-            <p className="text-muted-foreground max-w-3xl mx-auto text-lg">
-              Start your journey to financial freedom with our carefully crafted investment plans. 
-              Each plan is designed to maximize your returns while minimizing risk.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <Card className={`text-center hover:shadow-lg transition-all duration-500 hover:scale-105 hover:-translate-y-2 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`} style={{ transitionDelay: '200ms' }}>
-              <CardHeader>
-                <CardTitle className="text-2xl">Starter Plan</CardTitle>
-                <div className="text-3xl font-bold text-primary">$500</div>
-                <CardDescription>15% ROI • 30 days</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 mb-6 text-sm">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>15% guaranteed ROI</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>24/7 customer support</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Secure platform</span>
-                  </li>
-                </ul>
-                <Button className="w-full hover:scale-105 transition-transform duration-200">Choose Plan</Button>
-              </CardContent>
-            </Card>
-
-            <Card className={`text-center border-primary shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 relative ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`} style={{ transitionDelay: '400ms' }}>
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-pulse">
-                <Badge className="bg-primary text-primary-foreground px-4 py-1">
-                  <Star className="w-3 h-3 mr-1" />
-                  Most Popular
-                </Badge>
-              </div>
-              <CardHeader className="pt-8">
-                <CardTitle className="text-2xl">Professional Plan</CardTitle>
-                <div className="text-3xl font-bold text-primary">$5,000</div>
-                <CardDescription>25% ROI • 30 days</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 mb-6 text-sm">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>25% guaranteed ROI</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Personal account manager</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Advanced trading signals</span>
-                  </li>
-                </ul>
-                <Button className="w-full bg-primary hover:scale-105 transition-transform duration-200">Choose Plan</Button>
-              </CardContent>
-            </Card>
-
-            <Card className={`text-center hover:shadow-lg transition-all duration-500 hover:scale-105 hover:-translate-y-2 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`} style={{ transitionDelay: '600ms' }}>
-              <CardHeader>
-                <CardTitle className="text-2xl">Premium Plan</CardTitle>
-                <div className="text-3xl font-bold text-primary">$50,000</div>
-                <CardDescription>35% ROI • 30 days</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 mb-6 text-sm">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>35% guaranteed ROI</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>VIP support</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Instant withdrawals</span>
-                  </li>
-                </ul>
-                <Button className="w-full hover:scale-105 transition-transform duration-200">Choose Plan</Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className={`text-center transition-all duration-1000 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`} style={{ transitionDelay: '800ms' }}>
-            <Link to="/plan">
-              <Button size="lg" className="px-8 py-6 text-lg font-semibold hover:scale-105 transition-transform duration-200 hover:shadow-lg">
-                View All Plans
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* Why Choose Us */}
       <section className="py-20 px-6 bg-background">
@@ -356,7 +235,7 @@ const Index = () => {
                 <Phone className="w-10 h-10 text-primary hover:scale-110 transition-transform duration-300" />
               </div>
               <h3 className="text-xl font-bold mb-4">Phone</h3>
-              <p className="text-muted-foreground mb-2">+44 7848 179386</p>
+              <p className="text-muted-foreground mb-2">+12137274788</p>
               <p className="text-sm text-muted-foreground">24/7 Support Available</p>
             </div>
             
@@ -399,21 +278,21 @@ const Index = () => {
               Start with as little as $500 and watch your money grow.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/plan">
+              <Link to="/signup">
                 <Button 
                   size="lg" 
                   className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 px-8 py-6 text-lg font-semibold hover:scale-105 transition-transform duration-200"
                 >
-                  View Investment Plans
+                  Get Started Today
                 </Button>
               </Link>
-              <Link to="/faq">
+              <Link to="/signin">
                 <Button 
                   variant="outline" 
                   size="lg" 
                   className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary px-8 py-6 text-lg font-semibold hover:scale-105 transition-transform duration-200"
                 >
-                  Read FAQ
+                  Sign In
                 </Button>
               </Link>
             </div>

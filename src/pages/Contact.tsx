@@ -87,7 +87,7 @@ const Contact = () => {
       icon: Phone,
       title: "Phone Support",
       description: "24/7 Professional Support",
-      contact: "+44 7848 179386",
+      contact: "+12137274788",
       availability: "Available 24/7",
       color: "text-green-500"
     },

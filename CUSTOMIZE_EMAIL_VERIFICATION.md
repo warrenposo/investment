@@ -42,7 +42,7 @@ Change the email verification message from default Supabase to "Welcome to Valor
    <p style="font-size: 12px; color: #666;">
      Valora Capital - Premium Investment Platform<br>
      Email: info@valora-capital.com<br>
-     Phone: +44 7848 179386
+     Phone: +12137274788
    </p>
    ```
 
@@ -76,7 +76,7 @@ Change the email verification message from default Supabase to "Welcome to Valor
    <p style="font-size: 12px; color: #666;">
      Valora Capital - Premium Investment Platform<br>
      Email: info@valora-capital.com<br>
-     Phone: +44 7848 179386
+     Phone: +12137274788
    </p>
    ```
 
@@ -112,7 +112,7 @@ Change the email verification message from default Supabase to "Welcome to Valor
    <p style="font-size: 12px; color: #666;">
      Valora Capital - Premium Investment Platform<br>
      Email: info@valora-capital.com<br>
-     Phone: +44 7848 179386
+     Phone: +12137274788
    </p>
    ```
 

@@ -15,6 +15,7 @@ import {
   DollarSign
 } from 'lucide-react'
 import SupabaseService from '@/services/supabaseService'
+import QRCodeGenerator from './QRCodeGenerator'
 
 interface CompanyWallet {
   id: string
@@ -96,8 +97,10 @@ const CompanyWalletManager: React.FC = () => {
         return <Bitcoin className="w-5 h-5 text-orange-500" />
       case 'ETH':
         return <Coins className="w-5 h-5 text-blue-500" />
-      case 'USDT':
+      case 'USDT-ERC20':
         return <DollarSign className="w-5 h-5 text-green-500" />
+      case 'USDT-TRC20':
+        return <DollarSign className="w-5 h-5 text-red-500" />
       default:
         return <Wallet className="w-5 h-5" />
     }
@@ -109,8 +112,10 @@ const CompanyWalletManager: React.FC = () => {
         return 'Bitcoin'
       case 'ETH':
         return 'Ethereum'
-      case 'USDT':
-        return 'Tether (USDT)'
+      case 'USDT-ERC20':
+        return 'USDT (ERC-20)'
+      case 'USDT-TRC20':
+        return 'USDT (TRC-20)'
       default:
         return currency
     }
@@ -218,6 +223,10 @@ const CompanyWalletManager: React.FC = () => {
                       >
                         <Copy className="w-3 h-3" />
                       </Button>
+                      <QRCodeGenerator
+                        address={wallet.address}
+                        currency={wallet.currency}
+                      />
                     </div>
                   </div>
                   <Button

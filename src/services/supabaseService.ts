@@ -322,6 +322,287 @@ export class SupabaseService {
     if (error) throw error
     return data
   }
+
+  // Payment methods
+  static async createPaymentRequest(
+    userId: string,
+    currency: string,
+    amount: number,
+    address: string
+  ) {
+    const expiresAt = new Date()
+    expiresAt.setHours(expiresAt.getHours() + 24) // 24 hours expiry
+
+    const { data, error } = await supabase
+      .from('payment_requests')
+      .insert({
+        user_id: userId,
+        currency,
+        requested_amount: amount,
+        crypto_address: address,
+        expires_at: expiresAt.toISOString()
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  static async getUserPaymentRequests(userId: string) {
+    const { data, error } = await supabase
+      .from('payment_requests')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data
+  }
+
+  static async createPaymentTransaction(
+    userId: string,
+    currency: string,
+    cryptoAmount: number,
+    usdAmount: number,
+    txHash: string,
+    exchangeRate: number
+  ) {
+    const { data, error } = await supabase
+      .from('payment_transactions')
+      .insert({
+        user_id: userId,
+        currency,
+        crypto_amount: cryptoAmount,
+        usd_amount: usdAmount,
+        tx_hash: txHash,
+        exchange_rate: exchangeRate,
+        status: 'pending'
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  static async updatePaymentTransactionStatus(
+    transactionId: string,
+    status: 'pending' | 'confirmed' | 'failed' | 'expired',
+    confirmations?: number
+  ) {
+    const updateData: any = { status }
+    if (confirmations !== undefined) {
+      updateData.confirmations = confirmations
+    }
+
+    const { data, error } = await supabase
+      .from('payment_transactions')
+      .update(updateData)
+      .eq('id', transactionId)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  static async getUserPaymentTransactions(userId: string) {
+    const { data, error } = await supabase
+      .from('payment_transactions')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data
+  }
+
+  static async getAllPaymentTransactions() {
+    const { data, error } = await supabase
+      .from('payment_transactions')
+      .select(`
+        *,
+        users:user_id (
+          first_name,
+          last_name,
+          email
+        )
+      `)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data
+  }
+
+  static async saveUserCryptoAddress(
+    userId: string,
+    currency: string,
+    address: string
+  ) {
+    const { data, error } = await supabase
+      .from('user_crypto_addresses')
+      .insert({
+        user_id: userId,
+        currency,
+        address
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  static async getUserCryptoAddresses(userId: string) {
+    const { data, error } = await supabase
+      .from('user_crypto_addresses')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('is_active', true)
+
+    if (error) throw error
+    return data
+  }
+
+  static async getPendingPaymentTransactions() {
+    const { data, error } = await supabase
+      .from('payment_transactions')
+      .select('*')
+      .eq('status', 'pending')
+      .order('created_at', { ascending: true })
+
+    if (error) throw error
+    return data
+  }
+
+  // Company wallet methods
+  static async getCompanyWallets() {
+    const { data, error } = await supabase
+      .from('company_wallets')
+      .select('*')
+      .eq('is_active', true)
+      .order('currency')
+
+    if (error) throw error
+    return data
+  }
+
+  static async updateCompanyWallet(currency: string, address: string, walletName: string) {
+    const { data, error } = await supabase
+      .from('company_wallets')
+      .upsert({
+        currency,
+        address,
+        wallet_name: walletName,
+        is_active: true
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  static async createUserPaymentTracking(
+    userId: string,
+    paymentRequestId: string,
+    companyWalletId: string,
+    currency: string,
+    requestedAmount: number,
+    cryptoAmount: number,
+    companyAddress: string,
+    userReference: string
+  ) {
+    const { data, error } = await supabase
+      .from('user_payment_tracking')
+      .insert({
+        user_id: userId,
+        payment_request_id: paymentRequestId,
+        company_wallet_id: companyWalletId,
+        currency,
+        requested_amount: requestedAmount,
+        crypto_amount: cryptoAmount,
+        company_address: companyAddress,
+        user_reference: userReference,
+        status: 'pending'
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  static async updateUserPaymentTrackingStatus(
+    trackingId: string,
+    status: 'pending' | 'paid' | 'confirmed' | 'expired',
+    txHash?: string,
+    confirmations?: number
+  ) {
+    const updateData: any = { status }
+    if (txHash) updateData.tx_hash = txHash
+    if (confirmations !== undefined) updateData.confirmations = confirmations
+
+    const { data, error } = await supabase
+      .from('user_payment_tracking')
+      .update(updateData)
+      .eq('id', trackingId)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  static async getUserPaymentTracking(userId: string) {
+    const { data, error } = await supabase
+      .from('user_payment_tracking')
+      .select(`
+        *,
+        company_wallets:company_wallet_id (
+          wallet_name,
+          currency
+        )
+      `)
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data
+  }
+
+  static async getAllUserPaymentTracking() {
+    const { data, error } = await supabase
+      .from('user_payment_tracking')
+      .select(`
+        *,
+        users:user_id (
+          first_name,
+          last_name,
+          email
+        ),
+        company_wallets:company_wallet_id (
+          wallet_name,
+          currency
+        )
+      `)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data
+  }
+
+  static async getPendingUserPayments() {
+    const { data, error } = await supabase
+      .from('user_payment_tracking')
+      .select('*')
+      .eq('status', 'pending')
+      .order('created_at', { ascending: true })
+
+    if (error) throw error
+    return data
+  }
 }
 
 export default SupabaseService

@@ -14,6 +14,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import emailService from "@/services/emailService";
 import SupabaseService from "@/services/supabaseService";
 import KycChecker from "@/utils/kycChecker";
+import PaymentService from "@/services/paymentService";
 import { 
   TrendingUp, 
   DollarSign, 
@@ -63,6 +64,9 @@ const Dashboard = () => {
     activeInvestments: 0,
     totalWithdrawals: 0
   });
+  const [paymentRequests, setPaymentRequests] = useState<any[]>([]);
+  const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [kycStatus, setKycStatus] = useState({
     status: 'not_started' as 'pending' | 'approved' | 'rejected' | 'not_started',
     canDeposit: false,
@@ -126,6 +130,9 @@ const Dashboard = () => {
         const kycStatusData = await KycChecker.canUserDeposit(currentUser.id);
         setKycStatus(kycStatusData);
         
+        // Load payment data
+        await loadPaymentData(currentUser.id);
+        
         console.log('Supabase user loaded:', {
           id: currentUser.id,
           name: `${userProfile.first_name} ${userProfile.last_name}`,
@@ -149,6 +156,20 @@ const Dashboard = () => {
 
   // User's actual recent transactions (starts empty)
   const [recentTransactions, setRecentTransactions] = useState([]);
+
+  const loadPaymentData = async (userId: string) => {
+    try {
+      const [requests, history] = await Promise.all([
+        SupabaseService.getUserPaymentRequests(userId),
+        PaymentService.getUserPaymentHistory(userId)
+      ]);
+      
+      setPaymentRequests(requests);
+      setPaymentHistory(history);
+    } catch (error) {
+      console.error('Error loading payment data:', error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -287,30 +308,76 @@ const Dashboard = () => {
       return;
     }
 
-    try {
-      // Generate a transaction ID
-      const transactionId = `DP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      
-      // Send deposit confirmation email
-      await emailService.sendDepositConfirmation({
-        userName: userData.name,
-        userEmail: userData.email,
-        amount: formatCurrency(amount),
-        method: depositMethod,
-        transactionId: transactionId
-      });
+    setIsProcessingPayment(true);
 
-      // Simulate API call
-      setTimeout(() => {
-        setShowDepositModal(false);
-        setDepositAmount("");
-        setDepositMethod("");
-        setSelectedCrypto("");
+    try {
+      const currentUser = await SupabaseService.getCurrentUser();
+      if (!currentUser) {
+        navigate('/signin');
+        return;
+      }
+
+      // Create payment request based on method
+      let paymentRequest;
+      
+      if (depositMethod === 'Bitcoin' || depositMethod === 'Ethereum' || depositMethod === 'USDT') {
+        const currency = depositMethod === 'Bitcoin' ? 'BTC' : 
+                        depositMethod === 'Ethereum' ? 'ETH' : 'USDT';
+        
+        paymentRequest = await PaymentService.createPaymentRequest(
+          currentUser.id,
+          currency,
+          amount
+        );
+
+        // For development, simulate payment confirmation
+        await PaymentService.simulatePaymentConfirmation(
+          paymentRequest.trackingId,
+          currency,
+          amount
+        );
+
+        // Send deposit confirmation email
+        await emailService.sendDepositConfirmation({
+          userName: userData.name,
+          userEmail: userData.email,
+          amount: formatCurrency(amount),
+          method: depositMethod,
+          transactionId: paymentRequest.id,
+          cryptoAddress: paymentRequest.address,
+          cryptoAmount: paymentRequest.cryptoAmount
+        });
+
+        alert(`Payment request created!\n\nSend ${paymentRequest.cryptoAmount} ${currency} to:\n${paymentRequest.address}\n\nReference: ${paymentRequest.userReference}\n\nYour balance will be updated once the transaction is confirmed on the blockchain.`);
+      } else {
+        // Traditional payment methods (Card, Bank Transfer)
+        const transactionId = `DP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        
+        await emailService.sendDepositConfirmation({
+          userName: userData.name,
+          userEmail: userData.email,
+          amount: formatCurrency(amount),
+          method: depositMethod,
+          transactionId: transactionId
+        });
+
         alert(`Deposit request submitted for ${formatCurrency(amount)} via ${depositMethod}. Please complete the payment to fund your account. You will receive email confirmation once payment is confirmed.`);
-      }, 1000);
+      }
+
+      // Refresh payment data
+      await loadPaymentData(currentUser.id);
+      
+      // Close modal and reset form
+      setShowDepositModal(false);
+      setDepositAmount("");
+      setDepositMethod("");
+      setSelectedCrypto("");
+
     } catch (error) {
       console.error('Error processing deposit:', error);
       alert('Error processing deposit request. Please try again.');
+    } finally {
+      setIsProcessingPayment(false);
     }
   };
 

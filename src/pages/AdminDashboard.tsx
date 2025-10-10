@@ -17,6 +17,7 @@ import {
   Download
 } from 'lucide-react'
 import KycVerification from '@/components/KycVerification'
+import CompanyWalletManager from '@/components/CompanyWalletManager'
 import SupabaseService from '@/services/supabaseService'
 
 const AdminDashboard: React.FC = () => {
@@ -28,6 +29,7 @@ const AdminDashboard: React.FC = () => {
     pendingKyc: 0,
     verifiedUsers: 0
   })
+  const [activeTab, setActiveTab] = useState('kyc')
 
   useEffect(() => {
     checkAdminAccess()
@@ -199,8 +201,42 @@ const AdminDashboard: React.FC = () => {
           </Card>
         </div>
 
-        {/* KYC Verification Component */}
-        <KycVerification onStatsUpdate={loadStats} />
+        {/* Admin Tabs */}
+        <div className="space-y-6">
+          <div className="border-b">
+            <nav className="-mb-px flex space-x-8">
+              <button 
+                onClick={() => setActiveTab('kyc')}
+                className={`py-2 px-1 text-sm font-medium border-b-2 ${
+                  activeTab === 'kyc' 
+                    ? 'border-primary text-primary' 
+                    : 'border-transparent text-muted-foreground hover:text-muted-foreground hover:border-gray-300'
+                }`}
+              >
+                KYC Verification
+              </button>
+              <button 
+                onClick={() => setActiveTab('wallets')}
+                className={`py-2 px-1 text-sm font-medium border-b-2 ${
+                  activeTab === 'wallets' 
+                    ? 'border-primary text-primary' 
+                    : 'border-transparent text-muted-foreground hover:text-muted-foreground hover:border-gray-300'
+                }`}
+              >
+                Wallet Management
+              </button>
+            </nav>
+          </div>
+
+          {/* Tab Content */}
+          {activeTab === 'kyc' && (
+            <KycVerification onStatsUpdate={loadStats} />
+          )}
+          
+          {activeTab === 'wallets' && (
+            <CompanyWalletManager />
+          )}
+        </div>
       </div>
     </div>
   )

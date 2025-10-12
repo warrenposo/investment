@@ -516,10 +516,6 @@ const Dashboard = () => {
                 >
                   {showBalance ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
-                <p className="text-xs text-green-600 flex items-center gap-1">
-                  <ArrowUpRight className="w-3 h-3" />
-                  +12.5% from last month
-                </p>
               </div>
             </CardContent>
           </Card>
@@ -548,10 +544,6 @@ const Dashboard = () => {
               <div className="text-2xl font-bold text-green-600">
                 {showBalance ? (userData.totalProfit > 0 ? formatCurrency(userData.totalProfit) : "$0.00") : "••••••"}
               </div>
-              <p className="text-xs text-green-600 flex items-center gap-1 mt-2">
-                <ArrowUpRight className="w-3 h-3" />
-                +54.2% ROI
-              </p>
             </CardContent>
           </Card>
 
@@ -991,9 +983,6 @@ const Dashboard = () => {
                       <TrendingUp className="w-5 h-5 text-green-500" />
                       <span className="text-2xl font-bold text-green-500">{plan.roi}</span>
                       <span className="text-muted-foreground">{plan.frequency}</span>
-                    </div>
-                    <div className="text-sm text-muted-foreground mb-2">
-                      Duration: {plan.duration}
                     </div>
                   </CardHeader>
                   

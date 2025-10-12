@@ -207,9 +207,6 @@ const Plan = () => {
                     <span className="text-2xl font-bold text-green-500">{plan.roi}</span>
                     <span className="text-muted-foreground">{plan.frequency}</span>
                   </div>
-                  <div className="text-sm text-muted-foreground mb-2">
-                    Profit For {plan.duration}
-                  </div>
                 </CardHeader>
                 
                 <CardContent>

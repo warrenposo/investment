@@ -52,7 +52,7 @@ const plans = [
     name: "Professional",
     minInvestment: "$3000",
     maxInvestment: "$4999",
-    roi: "50%",
+    roi: "23%",
     frequency: "Every Day",
     duration: "Daily",
     totalReturn: "60.2%",
@@ -66,7 +66,7 @@ const plans = [
     name: "Pro",
     minInvestment: "$5000",
     maxInvestment: "$9999",
-    roi: "50%",
+    roi: "25%",
     frequency: "Every Day",
     duration: "Lifetime",
     totalReturn: "Lifetime Earning",
@@ -80,7 +80,7 @@ const plans = [
     name: "Elite",
     minInvestment: "$10000",
     maxInvestment: "$30000",
-    roi: "50%",
+    roi: "29.50%",
     frequency: "Every Day",
     duration: "Daily",
     totalReturn: "140%",
@@ -94,7 +94,7 @@ const plans = [
     name: "Prime",
     minInvestment: "$40000",
     maxInvestment: "$90000",
-    roi: "50%",
+    roi: "35%",
     frequency: "Every Hour",
     duration: "Lifetime",
     totalReturn: "Lifetime Earning",
@@ -108,7 +108,7 @@ const plans = [
     name: "Master",
     minInvestment: "$100000",
     maxInvestment: "$400000",
-    roi: "50%",
+    roi: "37%",
     frequency: "Every Hour",
     duration: "Lifetime",
     totalReturn: "Lifetime Earning",
@@ -122,7 +122,7 @@ const plans = [
     name: "Titan",
     minInvestment: "$500000",
     maxInvestment: "$900000",
-    roi: "50%",
+    roi: "45%",
     frequency: "Every Hour",
     duration: "Lifetime",
     totalReturn: "Lifetime Earning",
@@ -150,7 +150,7 @@ const plans = [
     name: "Infinite",
     minInvestment: "$1500000",
     maxInvestment: "$2500000",
-    roi: "50%",
+    roi: "55%",
     frequency: "Every Hour",
     duration: "Lifetime",
     totalReturn: "0%",
@@ -167,20 +167,20 @@ const Plan = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 px-6 bg-gradient-to-br from-primary/10 to-primary/5">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gradient-to-br from-primary/10 to-primary/5">
         <div className="container mx-auto max-w-4xl text-center">
-          <p className="text-primary text-sm font-semibold mb-4 tracking-wider">INVEST OFFER</p>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">Investment Plans</h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-primary text-xs sm:text-sm font-semibold mb-3 sm:mb-4 tracking-wider">INVEST OFFER</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">Investment Plans</h1>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
             Help investors to define their new business objectives and grow their investments bigger.
           </p>
         </div>
       </section>
 
       {/* Plans Section */}
-      <section className="py-20 px-6">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
         <div className="container mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {plans.map((plan) => (
               <Card 
                 key={plan.id} 
@@ -238,18 +238,18 @@ const Plan = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-6 bg-card">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-card">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <p className="text-primary text-sm font-semibold tracking-wider uppercase mb-3">
+          <div className="text-center mb-10 sm:mb-16">
+            <p className="text-primary text-xs sm:text-sm font-semibold tracking-wider uppercase mb-2 sm:mb-3">
               WHY CHOOSE US
             </p>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 px-4">
               Your Investment is Safe With Us
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             <div className="text-center">
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
                 <Shield className="w-10 h-10 text-primary" />
@@ -284,25 +284,25 @@ const Plan = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-primary text-primary-foreground">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-primary text-primary-foreground">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 px-4">
             Ready to Start Investing?
           </h2>
-          <p className="text-lg md:text-xl mb-8 opacity-90">
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90 px-4">
             We're here to help. If there's anything you need, please don't hesitate to contact us.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
             <Button 
               size="lg" 
-              className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 px-8 py-6 text-lg font-semibold"
+              className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg font-semibold"
             >
               Invest Now
             </Button>
             <Button 
               variant="outline" 
               size="lg" 
-              className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary px-8 py-6 text-lg font-semibold"
+              className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg font-semibold"
             >
               Contact Support
             </Button>
@@ -311,9 +311,9 @@ const Plan = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 px-6 bg-background">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-background">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
             {/* Contact Info */}
             <div>
               <h3 className="text-2xl font-bold mb-6">Contact</h3>

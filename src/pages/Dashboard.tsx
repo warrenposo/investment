@@ -16,6 +16,7 @@ import SupabaseService from "@/services/supabaseService";
 import KycChecker from "@/utils/kycChecker";
 import PaymentService from "@/services/paymentService";
 import QRCodeGenerator from "@/components/QRCodeGenerator";
+import ChatBox from "@/components/ChatBox";
 import { 
   TrendingUp, 
   DollarSign, 
@@ -35,8 +36,6 @@ import {
   Star,
   ArrowUpRight,
   ArrowDownRight,
-  CreditCard,
-  Smartphone,
   Copy,
   QrCode,
   Shield
@@ -331,20 +330,21 @@ const Dashboard = () => {
       // Create payment request based on method
       let paymentRequest;
       
-      if (depositMethod === 'Bitcoin' || depositMethod === 'Ethereum' || depositMethod === 'USDT') {
-        const currency = depositMethod === 'Bitcoin' ? 'BTC' : 
-                        depositMethod === 'Ethereum' ? 'ETH' : 'USDT';
+      if (depositMethod === 'bitcoin' || depositMethod === 'ethereum' || depositMethod === 'usdt-erc20' || depositMethod === 'usdt-trc20') {
+        const currency = depositMethod === 'bitcoin' ? 'BTC' : 
+                        depositMethod === 'ethereum' ? 'ETH' : 
+                        depositMethod === 'usdt-erc20' ? 'USDT-ERC20' : 'USDT-TRC20';
         
         paymentRequest = await PaymentService.createPaymentRequest(
           currentUser.id,
-          currency,
+          currency as 'BTC' | 'ETH' | 'USDT-ERC20' | 'USDT-TRC20',
           amount
         );
 
         // For development, simulate payment confirmation
         await PaymentService.simulatePaymentConfirmation(
           paymentRequest.trackingId,
-          currency,
+          currency as 'BTC' | 'ETH' | 'USDT-ERC20' | 'USDT-TRC20',
           amount
         );
 
@@ -354,25 +354,10 @@ const Dashboard = () => {
           userEmail: userData.email,
           amount: formatCurrency(amount),
           method: depositMethod,
-          transactionId: paymentRequest.id,
-          cryptoAddress: paymentRequest.address,
-          cryptoAmount: paymentRequest.cryptoAmount
+          transactionId: paymentRequest.id
         });
 
         alert(`Payment request created!\n\nSend ${paymentRequest.cryptoAmount} ${currency} to:\n${paymentRequest.address}\n\nReference: ${paymentRequest.userReference}\n\nYour balance will be updated once the transaction is confirmed on the blockchain.`);
-      } else {
-        // Traditional payment methods (Card, Bank Transfer)
-        const transactionId = `DP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        
-        await emailService.sendDepositConfirmation({
-          userName: userData.name,
-          userEmail: userData.email,
-          amount: formatCurrency(amount),
-          method: depositMethod,
-          transactionId: transactionId
-        });
-
-        alert(`Deposit request submitted for ${formatCurrency(amount)} via ${depositMethod}. Please complete the payment to fund your account. You will receive email confirmation once payment is confirmed.`);
       }
 
       // Refresh payment data
@@ -428,20 +413,20 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-card border-b border-border">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-lg font-bold text-primary-foreground">
+        <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary flex items-center justify-center text-base sm:text-lg font-bold text-primary-foreground">
                 VC
               </div>
               <div>
-                <h1 className="text-xl font-bold">Valora Capital</h1>
-                <p className="text-sm text-muted-foreground">Investment Dashboard</p>
+                <h1 className="text-base sm:text-xl font-bold">Valora Capital</h1>
+                <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">Investment Dashboard</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-4">
-              <div className="text-right">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className="text-right hidden md:block">
                 <p className="text-sm text-muted-foreground">Welcome back,</p>
                 <p className="font-semibold">{userData.name}</p>
               </div>
@@ -449,47 +434,47 @@ const Dashboard = () => {
               {/* KYC Status Indicator */}
               <div className="flex items-center gap-2">
                 {kycStatus.status === 'approved' ? (
-                  <Badge className="bg-green-100 text-green-800 flex items-center gap-1">
+                  <Badge className="bg-green-100 text-green-800 flex items-center gap-1 text-xs">
                     <CheckCircle className="w-3 h-3" />
-                    Verified
+                    <span className="hidden sm:inline">Verified</span>
                   </Badge>
                 ) : (
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => navigate('/kyc')}
-                    className="text-orange-600 border-orange-200 hover:bg-orange-50"
+                    className="text-orange-600 border-orange-200 hover:bg-orange-50 text-xs"
                   >
-                    <Shield className="w-3 h-3 mr-1" />
-                    Complete KYC
+                    <Shield className="w-3 h-3 sm:mr-1" />
+                    <span className="hidden sm:inline">Complete KYC</span>
                   </Button>
                 )}
               </div>
               
-              <Button variant="outline" size="sm" onClick={handleLogout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
+              <Button variant="outline" size="sm" onClick={handleLogout} className="text-xs sm:text-sm">
+                <LogOut className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Logout</span>
               </Button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* KYC Status Alert */}
         {kycStatus.status !== 'approved' && (
-          <Alert className="mb-6 border-orange-200 bg-orange-50">
+          <Alert className="mb-4 sm:mb-6 border-orange-200 bg-orange-50">
             <AlertCircle className="h-4 w-4 text-orange-600" />
             <AlertDescription className="text-orange-800">
-              <div className="flex items-center justify-between">
-                <div>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="text-sm">
                   <strong>KYC Verification Required:</strong> {kycStatus.message}
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => navigate('/kyc')}
-                  className="ml-4 border-orange-300 text-orange-700 hover:bg-orange-100"
+                  className="border-orange-300 text-orange-700 hover:bg-orange-100 text-xs whitespace-nowrap"
                 >
                   Complete KYC
                 </Button>
@@ -499,7 +484,7 @@ const Dashboard = () => {
         )}
 
         {/* Balance Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Balance</CardTitle>
@@ -565,12 +550,14 @@ const Dashboard = () => {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="investments">My Investments</TabsTrigger>
-            <TabsTrigger value="transactions">Transactions</TabsTrigger>
-            <TabsTrigger value="plans">Investment Plans</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto scrollbar-hide">
+            <TabsList className="grid w-full grid-cols-4 min-w-max sm:min-w-0">
+              <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
+              <TabsTrigger value="investments" className="text-xs sm:text-sm whitespace-nowrap">My Investments</TabsTrigger>
+              <TabsTrigger value="transactions" className="text-xs sm:text-sm">Transactions</TabsTrigger>
+              <TabsTrigger value="plans" className="text-xs sm:text-sm whitespace-nowrap">Investment Plans</TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
@@ -671,28 +658,28 @@ const Dashboard = () => {
             {/* Quick Actions */}
             <Card>
               <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg sm:text-xl">Quick Actions</CardTitle>
+                <CardDescription className="text-sm">
                   Manage your investments and account
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <Button className="h-20 flex flex-col gap-2" onClick={() => setActiveTab("plans")}>
-                    <Plus className="w-6 h-6" />
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                  <Button className="h-16 sm:h-20 flex flex-col gap-1 sm:gap-2 text-xs sm:text-sm" onClick={() => setActiveTab("plans")}>
+                    <Plus className="w-4 h-4 sm:w-6 sm:h-6" />
                     <span>New Investment</span>
                   </Button>
-                  <Button variant="outline" className="h-20 flex flex-col gap-2" onClick={() => handleDepositFunds()}>
-                    <DollarSign className="w-6 h-6" />
+                  <Button variant="outline" className="h-16 sm:h-20 flex flex-col gap-1 sm:gap-2 text-xs sm:text-sm" onClick={() => handleDepositFunds()}>
+                    <DollarSign className="w-4 h-4 sm:w-6 sm:h-6" />
                     <span>Deposit Funds</span>
                   </Button>
-                  <Button variant="outline" className="h-20 flex flex-col gap-2" onClick={() => handleWithdrawFunds()}>
-                    <Wallet className="w-6 h-6" />
+                  <Button variant="outline" className="h-16 sm:h-20 flex flex-col gap-1 sm:gap-2 text-xs sm:text-sm" onClick={() => handleWithdrawFunds()}>
+                    <Wallet className="w-4 h-4 sm:w-6 sm:h-6" />
                     <span>Withdraw Funds</span>
                   </Button>
-                  <Button variant="outline" className="h-20 flex flex-col gap-2" onClick={() => handleAccountSettings()}>
-                    <Settings className="w-6 h-6" />
-                    <span>Account Settings</span>
+                  <Button variant="outline" className="h-16 sm:h-20 flex flex-col gap-1 sm:gap-2 text-xs sm:text-sm" onClick={() => handleAccountSettings()}>
+                    <Settings className="w-4 h-4 sm:w-6 sm:h-6" />
+                    <span className="text-center">Account Settings</span>
                   </Button>
                 </div>
               </CardContent>
@@ -820,14 +807,14 @@ const Dashboard = () => {
 
           {/* Investment Plans Tab */}
           <TabsContent value="plans" className="space-y-6">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-4">Choose Your Investment Plan</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+            <div className="text-center mb-6 sm:mb-8 px-4">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Choose Your Investment Plan</h2>
+              <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
                 Select from our range of investment plans designed to maximize your returns while minimizing risk.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {[
                 {
                   id: "starter",
@@ -870,7 +857,7 @@ const Dashboard = () => {
                   name: "Professional",
                   minInvestment: "$3,000",
                   maxInvestment: "$4,999",
-                  roi: "50%",
+                  roi: "23%",
                   frequency: "Daily",
                   duration: "30 days",
                   badge: "Hot",
@@ -882,7 +869,7 @@ const Dashboard = () => {
                   name: "Pro",
                   minInvestment: "$5,000",
                   maxInvestment: "$9,999",
-                  roi: "50%",
+                  roi: "23%",
                   frequency: "Daily",
                   duration: "30 days",
                   badge: null,
@@ -894,7 +881,7 @@ const Dashboard = () => {
                   name: "Elite",
                   minInvestment: "$10,000",
                   maxInvestment: "$30,000",
-                  roi: "50%",
+                  roi: "29.50%",
                   frequency: "Daily",
                   duration: "30 days",
                   badge: "Hot",
@@ -906,7 +893,7 @@ const Dashboard = () => {
                   name: "Prime",
                   minInvestment: "$40,000",
                   maxInvestment: "$90,000",
-                  roi: "50%",
+                  roi: "35%",
                   frequency: "Hourly",
                   duration: "30 days",
                   badge: "Hourly",
@@ -918,7 +905,7 @@ const Dashboard = () => {
                   name: "Master",
                   minInvestment: "$100,000",
                   maxInvestment: "$400,000",
-                  roi: "50%",
+                  roi: "37%",
                   frequency: "Hourly",
                   duration: "30 days",
                   badge: null,
@@ -930,7 +917,7 @@ const Dashboard = () => {
                   name: "Titan",
                   minInvestment: "$500,000",
                   maxInvestment: "$900,000",
-                  roi: "50%",
+                  roi: "45%",
                   frequency: "Hourly",
                   duration: "30 days",
                   badge: null,
@@ -954,7 +941,7 @@ const Dashboard = () => {
                   name: "Infinite",
                   minInvestment: "$1,500,000",
                   maxInvestment: "$2,500,000",
-                  roi: "50%",
+                  roi: "55%",
                   frequency: "Hourly",
                   duration: "Lifetime",
                   badge: "High Return",
@@ -1007,7 +994,7 @@ const Dashboard = () => {
                           ? 'bg-primary hover:bg-primary/90' 
                           : 'bg-secondary hover:bg-secondary/80'
                       }`}
-                      onClick={() => handleInvestNow(plan.id, plan.name, plan.minAmount)}
+                      onClick={() => handleInvestNow(plan.id, plan.name, parseInt(plan.minInvestment.replace(/[^0-9]/g, '')))}
                     >
                       Invest Now
                     </Button>
@@ -1254,18 +1241,6 @@ const Dashboard = () => {
                         USDT (TRC-20)
                       </div>
                     </SelectItem>
-                    <SelectItem value="card">
-                      <div className="flex items-center gap-2">
-                        <CreditCard className="w-4 h-4" />
-                        Credit/Debit Card
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="bank">
-                      <div className="flex items-center gap-2">
-                        <Smartphone className="w-4 h-4" />
-                        Bank Transfer
-                      </div>
-                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -1336,7 +1311,7 @@ const Dashboard = () => {
                           depositMethod === 'usdt-erc20' ? 'USDT-ERC20' :
                           'USDT-TRC20'
                         }
-                        amount={depositAmount}
+                        amount={depositAmount && !isNaN(parseFloat(depositAmount)) ? parseFloat(depositAmount) : undefined}
                       />
                     </div>
                   </div>
@@ -1360,57 +1335,6 @@ const Dashboard = () => {
                 </div>
               )}
 
-              {/* Traditional Payment Section */}
-              {depositMethod && ['card', 'bank'].includes(depositMethod) && (
-                <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
-                  <div className="text-center">
-                    <h3 className="font-semibold mb-2">
-                      {depositMethod === 'card' ? 'Card Payment' : 'Bank Transfer'}
-                    </h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      {depositMethod === 'card' 
-                        ? 'Complete your payment using your credit or debit card'
-                        : 'Transfer funds directly from your bank account'
-                      }
-                    </p>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div>
-                      <Label>Amount to Pay</Label>
-                      <Input
-                        value={depositAmount ? formatCurrency(parseFloat(depositAmount)) : ''}
-                        readOnly
-                        className="font-semibold"
-                      />
-                    </div>
-                    
-                    {depositMethod === 'bank' && (
-                      <div>
-                        <Label>Bank Details</Label>
-                        <div className="space-y-2 text-sm">
-                          <div className="flex justify-between">
-                            <span>Bank Name:</span>
-                            <span className="font-mono">Valora Capital Bank</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Account Number:</span>
-                            <span className="font-mono">1234567890</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Routing Number:</span>
-                            <span className="font-mono">987654321</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>SWIFT Code:</span>
-                            <span className="font-mono">VCBKUS33</span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
               
               <div className="flex gap-3 pt-4">
                 <Button
@@ -1425,10 +1349,7 @@ const Dashboard = () => {
                   type="submit"
                   className="flex-1"
                 >
-                  {depositMethod && ['bitcoin', 'ethereum', 'usdt'].includes(depositMethod) 
-                    ? 'Confirm Payment' 
-                    : 'Process Payment'
-                  }
+                  Confirm Payment
                 </Button>
               </div>
             </form>
@@ -1559,6 +1480,9 @@ const Dashboard = () => {
           </DialogContent>
         </Dialog>
       </div>
+
+      {/* Chat Box */}
+      <ChatBox />
     </div>
   );
 };

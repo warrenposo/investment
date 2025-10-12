@@ -81,8 +81,8 @@ const FloatingPhone = () => {
         {renderPhone()}
       </div>
 
-      {/* Mobile Floating Phone */}
-      <div className={`fixed right-4 top-20 z-30 transition-all duration-1000 lg:hidden ${
+      {/* Mobile Floating Phone - Smaller and Better Positioned */}
+      <div className={`fixed right-2 bottom-4 z-20 transition-all duration-1000 lg:hidden ${
         isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
       }`}>
         {/* Mobile Phone Content */}
@@ -230,30 +230,30 @@ const FloatingPhone = () => {
 
   function renderMobilePhone() {
     return (
-      <div className="w-48 h-80 bg-gray-900 rounded-2xl p-1.5 shadow-2xl border-2 border-gray-800">
+      <div className="w-32 sm:w-40 h-64 sm:h-72 bg-gray-900 rounded-xl sm:rounded-2xl p-1 sm:p-1.5 shadow-2xl border border-gray-800 hover:scale-105 transition-transform duration-300">
         {/* Mobile Phone Screen */}
-        <div className="w-full h-full bg-black rounded-xl overflow-hidden relative">
+        <div className="w-full h-full bg-black rounded-lg sm:rounded-xl overflow-hidden relative">
           {/* Status Bar */}
-          <div className="h-5 bg-gray-900 flex items-center justify-between px-3 text-white text-xs">
+          <div className="h-4 bg-gray-900 flex items-center justify-between px-2 text-white text-[8px] sm:text-xs">
             <span>9:41</span>
-            <div className="w-3 h-1.5 border border-white rounded-sm">
-              <div className="w-2 h-1 bg-white rounded-sm m-0.5"></div>
+            <div className="w-2 h-1 border border-white rounded-sm">
+              <div className="w-1 h-0.5 bg-white rounded-sm"></div>
             </div>
           </div>
 
           {/* App Header */}
-          <div className="bg-primary h-8 flex items-center justify-between px-3 text-white">
-            <div className="flex items-center gap-1">
-              <DollarSign className="w-3 h-3" />
-              <span className="text-xs font-semibold">Valora</span>
+          <div className="bg-primary h-6 sm:h-7 flex items-center justify-between px-2 text-white">
+            <div className="flex items-center gap-0.5 sm:gap-1">
+              <DollarSign className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+              <span className="text-[9px] sm:text-xs font-semibold">Valora</span>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
               {priceChange >= 0 ? (
-                <TrendingUp className="w-3 h-3 text-green-400" />
+                <TrendingUp className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-green-400" />
               ) : (
-                <TrendingDown className="w-3 h-3 text-red-400" />
+                <TrendingDown className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-red-400" />
               )}
-              <span className={`text-xs font-mono ${
+              <span className={`text-[8px] sm:text-[10px] font-mono ${
                 priceChange >= 0 ? 'text-green-400' : 'text-red-400'
               }`}>
                 {priceChange >= 0 ? '+' : ''}{priceChange.toFixed(3)}
@@ -262,19 +262,19 @@ const FloatingPhone = () => {
           </div>
 
           {/* Chart Container */}
-          <div className="p-2 bg-gray-50 h-full">
+          <div className="p-1.5 sm:p-2 bg-gray-50 h-full">
             {/* Current Price Display */}
-            <div className="mb-2">
-              <div className="text-lg font-bold text-gray-900 font-mono">
+            <div className="mb-1.5">
+              <div className="text-sm sm:text-base font-bold text-gray-900 font-mono">
                 ${currentPrice.toFixed(4)}
               </div>
-              <div className="text-xs text-gray-600">EUR/USD</div>
+              <div className="text-[8px] sm:text-xs text-gray-600">EUR/USD</div>
             </div>
 
             {/* Mini Chart */}
-            <div className="bg-white rounded p-2 shadow-sm mb-2">
-              <div className="text-xs text-gray-600 mb-1">Live</div>
-              <div className="h-16 relative">
+            <div className="bg-white rounded p-1 sm:p-1.5 shadow-sm mb-1.5">
+              <div className="text-[8px] sm:text-[10px] text-gray-600 mb-0.5">Live</div>
+              <div className="h-12 sm:h-14 relative">
                 <svg className="w-full h-full" viewBox="0 0 200 60">
                   <defs>
                     <pattern id="grid-mobile" width="20" height="12" patternUnits="userSpaceOnUse">
@@ -305,13 +305,12 @@ const FloatingPhone = () => {
               </div>
             </div>
 
-            {/* Trading Pairs */}
-            <div className="space-y-1">
+            {/* Trading Pairs - Only one on very small screens */}
+            <div className="space-y-0.5 sm:space-y-1">
               {[
-                { pair: 'GBP/USD', price: 1.2847, change: 0.0023 },
-                { pair: 'USD/JPY', price: 149.23, change: -0.45 }
+                { pair: 'GBP/USD', price: 1.2847, change: 0.0023 }
               ].map((item, index) => (
-                <div key={index} className="flex items-center justify-between p-1 bg-white rounded text-xs">
+                <div key={index} className="flex items-center justify-between p-1 bg-white rounded text-[8px] sm:text-xs">
                   <div>
                     <div className="font-semibold text-gray-900">{item.pair}</div>
                     <div className="text-gray-600">{item.price.toFixed(4)}</div>
@@ -326,9 +325,9 @@ const FloatingPhone = () => {
             </div>
 
             {/* Trading Button */}
-            <div className="mt-2">
-              <button className="w-full bg-primary text-white py-1.5 rounded text-xs font-semibold hover:bg-primary/90 transition-colors">
-                Trade Now
+            <div className="mt-1.5">
+              <button className="w-full bg-primary text-white py-1 sm:py-1.5 rounded text-[9px] sm:text-xs font-semibold hover:bg-primary/90 transition-colors">
+                Trade
               </button>
             </div>
           </div>

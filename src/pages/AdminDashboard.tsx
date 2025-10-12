@@ -14,11 +14,13 @@ import {
   ArrowLeft,
   LogOut,
   Eye,
-  Download
+  Download,
+  MessageCircle
 } from 'lucide-react'
 import KycVerification from '@/components/KycVerification'
 import CompanyWalletManager from '@/components/CompanyWalletManager'
 import PaymentManager from '@/components/PaymentManager'
+import AdminChat from '@/components/AdminChat'
 import SupabaseService from '@/services/supabaseService'
 
 const AdminDashboard: React.FC = () => {
@@ -236,6 +238,18 @@ const AdminDashboard: React.FC = () => {
               >
                 Payment Management
               </button>
+              
+              <button 
+                onClick={() => setActiveTab('chat')}
+                className={`py-2 px-1 text-sm font-medium border-b-2 ${
+                  activeTab === 'chat' 
+                    ? 'border-primary text-primary' 
+                    : 'border-transparent text-muted-foreground hover:text-muted-foreground hover:border-gray-300'
+                }`}
+              >
+                <MessageCircle className="inline-block w-4 h-4 mr-1" />
+                User Messages
+              </button>
             </nav>
           </div>
 
@@ -250,6 +264,10 @@ const AdminDashboard: React.FC = () => {
           
           {activeTab === 'payments' && (
             <PaymentManager />
+          )}
+          
+          {activeTab === 'chat' && (
+            <AdminChat />
           )}
         </div>
       </div>

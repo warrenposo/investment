@@ -14,15 +14,15 @@ const Header = () => {
   return (
     <header className="w-full relative z-40">
       {/* Top bar */}
-      <div className="bg-secondary py-2 px-6 border-b border-border">
-        <div className="container mx-auto flex justify-between items-center text-sm">
-          <div className="flex gap-6">
-            <a href="mailto:info@valora-capital.com" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-              <Mail className="w-4 h-4" />
-              <span>info@valora-capital.com</span>
+      <div className="bg-card py-2 px-4 sm:px-6 border-b border-border">
+        <div className="container mx-auto flex justify-between items-center text-xs sm:text-sm">
+          <div className="flex gap-3 sm:gap-6">
+            <a href="mailto:info@valora-capital.com" className="flex items-center gap-1 sm:gap-2 text-muted-foreground hover:text-foreground transition-colors">
+              <Mail className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">info@valora-capital.com</span>
             </a>
-            <a href="tel:+12137274788" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-              <Phone className="w-4 h-4" />
+            <a href="tel:+12137274788" className="flex items-center gap-1 sm:gap-2 text-muted-foreground hover:text-foreground transition-colors">
+              <Phone className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>+12137274788</span>
             </a>
           </div>
@@ -33,7 +33,7 @@ const Header = () => {
       </div>
 
       {/* Main navigation */}
-      <nav className="bg-background py-4 px-6">
+      <nav className="bg-background py-4 px-4 sm:px-6">
         <div className="container mx-auto flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-xl font-bold">

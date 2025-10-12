@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -43,6 +44,7 @@ import {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { signOut } = useAuth();
   const [showBalance, setShowBalance] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
@@ -175,12 +177,9 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     try {
-      await SupabaseService.signOut();
-      navigate('/');
+      await signOut();
     } catch (error) {
       console.error('Logout error:', error);
-      // Even if signOut fails, redirect to home page
-      navigate('/');
     }
   };
 

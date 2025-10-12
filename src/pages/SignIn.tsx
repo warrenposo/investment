@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
-import SupabaseService from "@/services/supabaseService";
+import { useAuth } from "@/contexts/AuthContext";
 
 const SignIn = () => {
-  const navigate = useNavigate();
+  const { signIn } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -49,43 +49,14 @@ const SignIn = () => {
     if (!validateForm()) return;
 
     setIsLoading(true);
+    setError(null);
     
     try {
-      // Use Supabase authentication
-      const data = await SupabaseService.signIn(formData.email, formData.password);
-      
-      // Check if we have a valid response
-      if (!data) {
-        throw new Error('No data received from authentication service');
-      }
-
-      // Check if user exists in the response
-      if (!data.user) {
-        throw new Error('User not found in authentication response');
-      }
-
-      // Get user profile from Supabase
-      const userProfile = await SupabaseService.getUserProfile(data.user.id);
-      
-      // Check if user is admin based on email
-      const isAdmin = formData.email === 'warrenokumu98@gmail.com';
-      
-      console.log('SignIn - Email:', formData.email);
-      console.log('SignIn - Is admin?', isAdmin);
-      
-      // Navigate based on user role - no localStorage needed
-      if (isAdmin) {
-        // Admin users go directly to admin dashboard
-        console.log('SignIn - Redirecting admin to /admin');
-        navigate("/admin");
-      } else {
-        // Regular users go to dashboard
-        console.log('SignIn - Redirecting user to /dashboard');
-        navigate("/dashboard");
-      }
+      // Use auth context to sign in (handles navigation automatically)
+      await signIn(formData.email, formData.password);
     } catch (error: any) {
       console.error('Sign in error:', error);
-      setError(error.message || 'Sign in failed. Please try again.');
+      setError(error.message || 'Sign in failed. Please check your credentials and try again.');
     } finally {
       setIsLoading(false);
     }

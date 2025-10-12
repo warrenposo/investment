@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/contexts/AuthContext'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -25,6 +26,7 @@ import SupabaseService from '@/services/supabaseService'
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate()
+  const { signOut } = useAuth()
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState({
@@ -98,12 +100,9 @@ const AdminDashboard: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await SupabaseService.signOut();
-      navigate('/');
+      await signOut();
     } catch (error) {
       console.error('Logout error:', error);
-      // Even if signOut fails, redirect to home page
-      navigate('/');
     }
   }
 

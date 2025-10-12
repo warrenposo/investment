@@ -12,10 +12,10 @@ const plans = [
     maxInvestment: "$499",
     roi: "9.8%",
     frequency: "Every Day",
-    duration: "Weekly Trial",
+    duration: "Daily Trial",
     totalReturn: "9.8%",
     capitalBack: true,
-    badge: "Weekly Trial",
+    badge: "Daily Trial",
     badgeColor: "bg-blue-500",
     popular: false
   },
@@ -127,7 +127,7 @@ const plans = [
     duration: "Lifetime",
     totalReturn: "Lifetime Earning",
     capitalBack: true,
-    badge: "Hourly",
+    badge: "Hourly Trial",
     badgeColor: "bg-purple-500",
     popular: false
   },

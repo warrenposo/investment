@@ -205,7 +205,6 @@ const Plan = () => {
                   <div className="flex items-center justify-center gap-2 mb-4">
                     <TrendingUp className="w-5 h-5 text-green-500" />
                     <span className="text-2xl font-bold text-green-500">{plan.roi}</span>
-                    <span className="text-muted-foreground">{plan.frequency}</span>
                   </div>
                 </CardHeader>
                 

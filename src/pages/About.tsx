@@ -314,7 +314,7 @@ const About = () => {
       <section className="py-20 px-6 bg-gradient-to-br from-primary/10 to-primary/5">
         <div className="container mx-auto max-w-4xl text-center">
           <p className="text-primary text-sm font-semibold mb-4 tracking-wider">CHOOSE INVESTMENT</p>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">Why You Should Our Plans</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">Why You Should Choose Our Plans</h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             At Valora Capital, we don't just offer an opportunity — we offer a pathway to real financial growth, 
             backed by transparency, performance, and community trust.

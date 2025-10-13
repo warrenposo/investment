@@ -27,7 +27,7 @@ const Hero = () => {
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}>
         <p className="text-primary text-sm font-semibold mb-4 tracking-wider animate-pulse">Crypto INVESTMENTS</p>
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">COMPANY BIG PROFITS</h1>
+        <h1 className="text-4xl md:text-6xl font-bold mb-6"> BIG PROFITS</h1>
         <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
           A Profitable platform for high-margin investment. We accumulate traders like you to leverage investment and make big profits.
         </p>

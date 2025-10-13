@@ -127,8 +127,12 @@ const Index = () => {
             <Card className={`overflow-hidden hover:shadow-lg transition-all duration-500 hover:scale-105 hover:-translate-y-2 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`} style={{ transitionDelay: '400ms' }}>
-              <div className="h-48 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                <BarChart3 className="w-12 h-12 text-primary hover:scale-110 transition-transform duration-300" />
+              <div className="h-48 overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&auto=format&fit=crop&q=80" 
+                  alt="Forex Market Analysis" 
+                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                />
               </div>
               <CardContent className="p-6">
                 <Badge variant="outline" className="mb-3">Market Analysis</Badge>
@@ -138,21 +142,27 @@ const Index = () => {
                 </p>
                 <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
                   <span>Sarah Johnson</span>
-                  <span>Jan 15, 2024</span>
+                  <span>Oct 10, 2025</span>
                   <span>5 min read</span>
                 </div>
-                <Button variant="outline" size="sm" className="flex items-center gap-2 hover:scale-105 transition-transform duration-200">
-                  Read More
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <a href="https://www.google.com/search?q=forex+trading+strategies+currency+pairs+professional+traders" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm" className="flex items-center gap-2 hover:scale-105 transition-transform duration-200">
+                    Read More
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </a>
               </CardContent>
             </Card>
 
             <Card className={`overflow-hidden hover:shadow-lg transition-all duration-500 hover:scale-105 hover:-translate-y-2 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`} style={{ transitionDelay: '600ms' }}>
-              <div className="h-48 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                <TrendingUp className="w-12 h-12 text-primary hover:scale-110 transition-transform duration-300" />
+              <div className="h-48 overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80" 
+                  alt="Trading Risk Management" 
+                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                />
               </div>
               <CardContent className="p-6">
                 <Badge variant="outline" className="mb-3">Trading Tips</Badge>
@@ -162,21 +172,27 @@ const Index = () => {
                 </p>
                 <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
                   <span>Michael Chen</span>
-                  <span>Jan 12, 2024</span>
+                  <span>Oct 8, 2025</span>
                   <span>7 min read</span>
                 </div>
-                <Button variant="outline" size="sm" className="flex items-center gap-2 hover:scale-105 transition-transform duration-200">
-                  Read More
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <a href="https://www.google.com/search?q=cryptocurrency+trading+risk+management+strategies" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm" className="flex items-center gap-2 hover:scale-105 transition-transform duration-200">
+                    Read More
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </a>
               </CardContent>
             </Card>
 
             <Card className={`overflow-hidden hover:shadow-lg transition-all duration-500 hover:scale-105 hover:-translate-y-2 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`} style={{ transitionDelay: '800ms' }}>
-              <div className="h-48 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                <DollarSign className="w-12 h-12 text-primary hover:scale-110 transition-transform duration-300" />
+              <div className="h-48 overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=800&auto=format&fit=crop&q=80" 
+                  alt="Investment Portfolio Strategy" 
+                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                />
               </div>
               <CardContent className="p-6">
                 <Badge variant="outline" className="mb-3">Investment Strategy</Badge>
@@ -186,13 +202,15 @@ const Index = () => {
                 </p>
                 <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
                   <span>David Thompson</span>
-                  <span>Jan 8, 2024</span>
+                  <span>Oct 5, 2025</span>
                   <span>8 min read</span>
                 </div>
-                <Button variant="outline" size="sm" className="flex items-center gap-2 hover:scale-105 transition-transform duration-200">
-                  Read More
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <a href="https://www.google.com/search?q=diversified+investment+portfolio+strategies" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm" className="flex items-center gap-2 hover:scale-105 transition-transform duration-200">
+                    Read More
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </a>
               </CardContent>
             </Card>
           </div>

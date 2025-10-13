@@ -68,7 +68,7 @@ const Features = () => {
               CHOOSE INVESTMENT
             </p>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Why You Should Our Plans
+              Why You Should Choose Our Plans
             </h2>
             <p className="text-muted-foreground max-w-3xl mx-auto text-lg">
               At Valora Capital, we don't just offer an opportunity — we offer a pathway 

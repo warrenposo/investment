@@ -66,8 +66,16 @@ const Dashboard = () => {
     totalInvested: 0,
     totalProfit: 0,
     activeInvestments: 0,
-    totalWithdrawals: 0
+    totalWithdrawals: 0,
+    referralCode: ""
   });
+  const [referralStats, setReferralStats] = useState({
+    totalReferrals: 0,
+    activeReferrals: 0,
+    totalRewards: 0,
+    paidRewards: 0
+  });
+  const [showReferralLink, setShowReferralLink] = useState(false);
   const [paymentRequests, setPaymentRequests] = useState<any[]>([]);
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
@@ -127,8 +135,15 @@ const Dashboard = () => {
           totalInvested: userBalance?.total_invested || 0,
           totalProfit: userBalance?.total_profit || 0,
           activeInvestments: userBalance?.active_investments || 0,
-          totalWithdrawals: userBalance?.total_withdrawals || 0
+          totalWithdrawals: userBalance?.total_withdrawals || 0,
+          referralCode: userProfile.referral_code || ""
         });
+
+        // Load referral stats
+        if (userProfile.referral_code) {
+          const stats = await SupabaseService.getReferralStats(currentUser.id);
+          setReferralStats(stats);
+        }
         
         // Get KYC status
         const kycStatusData = await KycChecker.canUserDeposit(currentUser.id);
@@ -378,7 +393,13 @@ const Dashboard = () => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    alert("Address copied to clipboard!");
+    alert("Copied to clipboard!");
+  };
+
+  const copyReferralLink = () => {
+    const referralLink = `${window.location.origin}/signup?ref=${userData.referralCode}`;
+    navigator.clipboard.writeText(referralLink);
+    alert("Referral link copied to clipboard!");
   };
 
   const formatCurrency = (amount: number) => {
@@ -653,6 +674,98 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Referral Section */}
+            {userData.referralCode && (
+              <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+                        <Users className="w-5 h-5 text-primary" />
+                        Refer & Earn
+                      </CardTitle>
+                      <CardDescription className="text-sm mt-1">
+                        Share your referral link and earn rewards
+                      </CardDescription>
+                    </div>
+                    <Badge className="bg-primary text-primary-foreground">
+                      {referralStats.totalReferrals} Referrals
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Referral Stats */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div className="bg-card p-3 rounded-lg border">
+                      <p className="text-xs text-muted-foreground">Total Referrals</p>
+                      <p className="text-xl font-bold text-primary">{referralStats.totalReferrals}</p>
+                    </div>
+                    <div className="bg-card p-3 rounded-lg border">
+                      <p className="text-xs text-muted-foreground">Active</p>
+                      <p className="text-xl font-bold text-green-600">{referralStats.activeReferrals}</p>
+                    </div>
+                    <div className="bg-card p-3 rounded-lg border">
+                      <p className="text-xs text-muted-foreground">Total Rewards</p>
+                      <p className="text-xl font-bold text-blue-600">${referralStats.totalRewards.toFixed(2)}</p>
+                    </div>
+                    <div className="bg-card p-3 rounded-lg border">
+                      <p className="text-xs text-muted-foreground">Paid Out</p>
+                      <p className="text-xl font-bold text-purple-600">${referralStats.paidRewards.toFixed(2)}</p>
+                    </div>
+                  </div>
+
+                  {/* Referral Link */}
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold">Your Referral Link</Label>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <Input
+                        value={`${window.location.origin}/signup?ref=${userData.referralCode}`}
+                        readOnly
+                        className="flex-1 font-mono text-xs sm:text-sm bg-card"
+                        onClick={(e) => (e.target as HTMLInputElement).select()}
+                      />
+                      <Button
+                        onClick={copyReferralLink}
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground whitespace-nowrap"
+                      >
+                        <Copy className="w-4 h-4 mr-2" />
+                        Copy Link
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Referral Code */}
+                  <div className="flex items-center justify-between p-3 bg-card rounded-lg border">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Your Referral Code</p>
+                      <p className="text-lg font-bold font-mono text-primary">{userData.referralCode}</p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        navigator.clipboard.writeText(userData.referralCode);
+                        alert("Referral code copied!");
+                      }}
+                    >
+                      <Copy className="w-4 h-4" />
+                    </Button>
+                  </div>
+
+                  {/* How it works */}
+                  <div className="p-3 bg-card rounded-lg border">
+                    <p className="text-xs font-semibold mb-2">How it works:</p>
+                    <ul className="text-xs text-muted-foreground space-y-1">
+                      <li>• Share your referral link with friends and family</li>
+                      <li>• They sign up using your link</li>
+                      <li>• Earn rewards when they make their first investment</li>
+                      <li>• Track your referrals and earnings in real-time</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Quick Actions */}
             <Card>

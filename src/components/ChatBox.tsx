@@ -6,8 +6,15 @@ import { MessageCircle, X, Send } from 'lucide-react';
 import ChatService, { ChatMessage } from '@/services/chatService';
 import SupabaseService from '@/services/supabaseService';
 
-const ChatBox = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface ChatBoxProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+const ChatBox = ({ isOpen: externalIsOpen, onOpenChange }: ChatBoxProps = {}) => {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const setIsOpen = onOpenChange || setInternalIsOpen;
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [userId, setUserId] = useState<string | null>(null);

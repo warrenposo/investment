@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, Star, TrendingUp, Shield, Clock, Phone, Mail, MapPin } from "lucide-react";
+import { useState } from "react";
+import ChatBox from "@/components/ChatBox";
 
 const plans = [
   {
@@ -162,6 +164,8 @@ const plans = [
 ];
 
 const Plan = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
@@ -303,10 +307,62 @@ const Plan = () => {
               variant="outline" 
               size="lg" 
               className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg font-semibold"
+              onClick={() => setIsChatOpen(true)}
             >
               Contact Support
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* Referral Promotion Section */}
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gradient-to-br from-primary/10 to-primary/5">
+        <div className="container mx-auto max-w-4xl text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
+            <Star className="w-8 h-8 text-primary" />
+          </div>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
+            Refer Friends & Earn Rewards
+          </h2>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
+            Share Valora Capital with your friends and family. When they sign up and invest, you both earn rewards!
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+            <div className="p-6 bg-card rounded-lg border">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">1</span>
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Share Your Link</h3>
+              <p className="text-sm text-muted-foreground">
+                Get your unique referral link from your dashboard
+              </p>
+            </div>
+            <div className="p-6 bg-card rounded-lg border">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">2</span>
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Friends Sign Up</h3>
+              <p className="text-sm text-muted-foreground">
+                They create an account using your referral link
+              </p>
+            </div>
+            <div className="p-6 bg-card rounded-lg border">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">3</span>
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Earn Together</h3>
+              <p className="text-sm text-muted-foreground">
+                Both of you receive rewards when they invest
+              </p>
+            </div>
+          </div>
+          <Button 
+            size="lg" 
+            className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold"
+            onClick={() => window.location.href = '/dashboard'}
+          >
+            Get Your Referral Link
+          </Button>
         </div>
       </section>
 
@@ -352,6 +408,9 @@ const Plan = () => {
           </div>
         </div>
       </section>
+
+      {/* Chat Box */}
+      <ChatBox isOpen={isChatOpen} onOpenChange={setIsChatOpen} />
     </div>
   );
 };

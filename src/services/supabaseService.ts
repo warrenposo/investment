@@ -7,6 +7,7 @@ export class SupabaseService {
     lastName: string
     phone?: string
     country?: string
+    referredBy?: string
   }) {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -16,7 +17,8 @@ export class SupabaseService {
           first_name: userData.firstName,
           last_name: userData.lastName,
           phone: userData.phone,
-          country: userData.country
+          country: userData.country,
+          referred_by: userData.referredBy
         }
       }
     })
@@ -602,6 +604,55 @@ export class SupabaseService {
 
     if (error) throw error
     return data
+  }
+
+  // Referral methods
+  static async getUserByReferralCode(referralCode: string) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, first_name, last_name')
+      .eq('referral_code', referralCode)
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  static async getUserReferrals(userId: string) {
+    const { data, error } = await supabase
+      .from('referrals')
+      .select(`
+        *,
+        referred_user:referred_id (
+          first_name,
+          last_name,
+          email,
+          created_at
+        )
+      `)
+      .eq('referrer_id', userId)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  }
+
+  static async getReferralStats(userId: string) {
+    const { data, error } = await supabase
+      .from('referrals')
+      .select('status, reward_amount, reward_paid')
+      .eq('referrer_id', userId)
+
+    if (error) throw error
+    
+    const stats = {
+      totalReferrals: data?.length || 0,
+      activeReferrals: data?.filter(r => r.status === 'active').length || 0,
+      totalRewards: data?.reduce((sum, r) => sum + (r.reward_amount || 0), 0) || 0,
+      paidRewards: data?.filter(r => r.reward_paid).reduce((sum, r) => sum + (r.reward_amount || 0), 0) || 0
+    }
+
+    return stats
   }
 }
 

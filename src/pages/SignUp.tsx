@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +10,7 @@ import SupabaseService from "@/services/supabaseService";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -25,6 +26,30 @@ const SignUp = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [referralCode, setReferralCode] = useState<string | null>(null);
+  const [referrerName, setReferrerName] = useState<string | null>(null);
+
+  // Check for referral code in URL
+  useEffect(() => {
+    const ref = searchParams.get('ref');
+    if (ref) {
+      setReferralCode(ref);
+      // Optionally, verify the referral code and get referrer name
+      verifyReferralCode(ref);
+    }
+  }, [searchParams]);
+
+  const verifyReferralCode = async (code: string) => {
+    try {
+      const referrer = await SupabaseService.getUserByReferralCode(code);
+      if (referrer) {
+        setReferrerName(`${referrer.first_name} ${referrer.last_name}`);
+      }
+    } catch (error) {
+      console.log('Invalid referral code');
+      setReferralCode(null);
+    }
+  };
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -61,12 +86,24 @@ const SignUp = () => {
     setIsLoading(true);
     
     try {
+      // Get referrer ID if referral code exists
+      let referredById = null;
+      if (referralCode) {
+        try {
+          const referrer = await SupabaseService.getUserByReferralCode(referralCode);
+          referredById = referrer?.id;
+        } catch (err) {
+          console.log('Could not find referrer');
+        }
+      }
+
       // Use Supabase authentication
       const { data, error } = await SupabaseService.signUp(formData.email, formData.password, {
         firstName: formData.firstName,
         lastName: formData.lastName,
         phone: formData.phone,
-        country: formData.country
+        country: formData.country,
+        referredBy: referredById
       });
       
       if (error) {
@@ -126,6 +163,13 @@ const SignUp = () => {
             <CardDescription>
               Join thousands of successful investors on Valora Capital
             </CardDescription>
+            {referrerName && (
+              <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-sm text-green-800">
+                  🎉 You were referred by <strong>{referrerName}</strong>
+                </p>
+              </div>
+            )}
           </CardHeader>
           
           <CardContent>

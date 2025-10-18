@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { HelpCircle, Shield, DollarSign, Clock, Users, TrendingUp } from "lucide-react";
+import { useState } from "react";
+import ChatBox from "@/components/ChatBox";
 
 const faqCategories = [
   {
@@ -126,6 +128,8 @@ const faqCategories = [
 ];
 
 const FAQ = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
@@ -203,10 +207,10 @@ const FAQ = () => {
             Can't find the answer you're looking for? Our support team is here to help you 24/7.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="px-8 py-6 text-lg font-semibold">
+            <Button size="lg" className="px-8 py-6 text-lg font-semibold" onClick={() => setIsChatOpen(true)}>
               Contact Support
             </Button>
-            <Button variant="outline" size="lg" className="px-8 py-6 text-lg font-semibold">
+            <Button variant="outline" size="lg" className="px-8 py-6 text-lg font-semibold" onClick={() => setIsChatOpen(true)}>
               Live Chat
             </Button>
           </div>
@@ -248,6 +252,9 @@ const FAQ = () => {
           </div>
         </div>
       </section>
+
+      {/* Chat Box */}
+      <ChatBox isOpen={isChatOpen} onOpenChange={setIsChatOpen} />
     </div>
   );
 };

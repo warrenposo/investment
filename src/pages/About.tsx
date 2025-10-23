@@ -262,32 +262,32 @@ const features = [
   {
     icon: Users,
     title: "Expert Management",
-    description: "Replacing a maintains the amount of lines. When replacing a selection. help agencies to define their new business objectives and then create."
+    description: "Our team of experienced financial professionals manages your investments with expertise and precision, ensuring optimal returns through strategic portfolio management and market analysis."
   },
   {
     icon: Award,
     title: "Registered Company",
-    description: "Replacing a maintains the amount of lines. When replacing a selection. help agencies to define their new business objectives and then create."
+    description: "Valora Capital is a fully registered and licensed investment company, operating under strict regulatory compliance to ensure your investments are protected and legitimate."
   },
   {
     icon: Shield,
     title: "Secure Investment",
-    description: "Replacing a maintains the amount of lines. When replacing a selection. help agencies to define their new business objectives and then create."
+    description: "Your investments are protected by advanced security measures, encrypted transactions, and comprehensive insurance coverage to safeguard your financial assets."
   },
   {
     icon: CheckCircle,
     title: "Verified Security",
-    description: "Replacing a maintains the amount of lines. When replacing a selection. help agencies to define their new business objectives and then create."
+    description: "Our platform undergoes regular security audits and verification processes, ensuring that all transactions and user data meet the highest industry standards."
   },
   {
     icon: Zap,
     title: "Instant Withdrawal",
-    description: "Replacing a maintains the amount of lines. When replacing a selection. help agencies to define their new business objectives and then create."
+    description: "Withdraw your profits instantly through multiple payment methods. Our streamlined withdrawal process ensures you receive your funds quickly and securely."
   },
   {
     icon: Award,
-    title: "Registered Company",
-    description: "Replacing a maintains the amount of lines. When replacing a selection. help agencies to define their new business objectives and then create."
+    title: "24/7 Support",
+    description: "Our dedicated support team is available 24/7 to assist you with any questions or concerns, providing personalized help whenever you need it."
   }
 ];
 

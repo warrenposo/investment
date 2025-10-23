@@ -46,8 +46,9 @@ const SignUp = () => {
         setReferrerName(`${referrer.first_name} ${referrer.last_name}`);
       }
     } catch (error) {
-      console.log('Invalid referral code');
-      setReferralCode(null);
+      console.log('Invalid referral code or referral system not yet set up');
+      // Don't clear referral code - we'll try to use it during signup anyway
+      // setReferralCode(null);
     }
   };
 
@@ -93,46 +94,57 @@ const SignUp = () => {
           const referrer = await SupabaseService.getUserByReferralCode(referralCode);
           referredById = referrer?.id;
         } catch (err) {
-          console.log('Could not find referrer');
+          console.log('Could not find referrer - referral system may not be set up yet');
+          // Continue with signup even if referral lookup fails
         }
       }
 
       // Use Supabase authentication
-      const { data, error } = await SupabaseService.signUp(formData.email, formData.password, {
+      // Only pass referredBy if we have a valid referrer ID
+      const signUpData: any = {
         firstName: formData.firstName,
         lastName: formData.lastName,
         phone: formData.phone,
-        country: formData.country,
-        referredBy: referredById
-      });
+        country: formData.country
+      };
+
+      if (referredById) {
+        signUpData.referredBy = referredById;
+      }
+
+      const { data, error } = await SupabaseService.signUp(formData.email, formData.password, signUpData);
       
       if (error) {
         throw error;
       }
 
-      if (data.user) {
+      if (data && data.user) {
         // Check if user is admin
         const isAdmin = formData.email === 'warrenokumu98@gmail.com';
         
-      // Store user data in localStorage for quick access
-      const userData = {
-        id: data.user.id,
-        name: `${formData.firstName} ${formData.lastName}`,
-        email: data.user.email,
-        isAdmin: isAdmin,
-        role: isAdmin ? 'admin' : 'user'
-      };
-      
-      localStorage.setItem('valoraUserData', JSON.stringify(userData));
-      
-      // Navigate based on user role
-      if (isAdmin) {
-        // Admin users go directly to admin dashboard
-        navigate("/admin");
+        // Store user data in localStorage for quick access
+        const userData = {
+          id: data.user.id,
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: data.user.email,
+          isAdmin: isAdmin,
+          role: isAdmin ? 'admin' : 'user'
+        };
+        
+        localStorage.setItem('valoraUserData', JSON.stringify(userData));
+        
+        // Navigate based on user role
+        if (isAdmin) {
+          // Admin users go directly to admin dashboard
+          navigate("/admin");
+        } else {
+          // Regular users go to dashboard
+          navigate("/dashboard");
+        }
       } else {
-        // Regular users go to dashboard
-        navigate("/dashboard");
-      }
+        // Signup successful but no user data returned (email confirmation might be required)
+        alert('Account created successfully! Please check your email to verify your account.');
+        navigate("/signin");
       }
     } catch (error: any) {
       console.error('Sign up error:', error);

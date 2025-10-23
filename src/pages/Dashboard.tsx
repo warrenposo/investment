@@ -139,10 +139,14 @@ const Dashboard = () => {
           referralCode: userProfile.referral_code || ""
         });
 
-        // Load referral stats
+        // Load referral stats (only if referral system is set up)
         if (userProfile.referral_code) {
-          const stats = await SupabaseService.getReferralStats(currentUser.id);
-          setReferralStats(stats);
+          try {
+            const stats = await SupabaseService.getReferralStats(currentUser.id);
+            setReferralStats(stats);
+          } catch (error) {
+            console.log('Referral system not yet set up - skipping referral stats');
+          }
         }
         
         // Get KYC status

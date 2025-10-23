@@ -9,17 +9,24 @@ export class SupabaseService {
     country?: string
     referredBy?: string
   }) {
+    // Build metadata object - only include referred_by if it exists
+    const metadata: any = {
+      first_name: userData.firstName,
+      last_name: userData.lastName,
+      phone: userData.phone,
+      country: userData.country
+    }
+
+    // Only add referred_by if it's provided (for backward compatibility)
+    if (userData.referredBy) {
+      metadata.referred_by = userData.referredBy
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: {
-          first_name: userData.firstName,
-          last_name: userData.lastName,
-          phone: userData.phone,
-          country: userData.country,
-          referred_by: userData.referredBy
-        }
+        data: metadata
       }
     })
 

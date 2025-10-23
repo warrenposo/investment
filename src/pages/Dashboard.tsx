@@ -1010,9 +1010,9 @@ const Dashboard = () => {
                   minInvestment: "$40,000",
                   maxInvestment: "$90,000",
                   roi: "35%",
-                  frequency: "Weekly Trail",
+                  frequency: "Weekly Trial",
                   duration: "30 days",
-                  badge: "Weekly Trail",
+                  badge: "Weekly Trial",
                   badgeColor: "bg-purple-500",
                   popular: false
                 },

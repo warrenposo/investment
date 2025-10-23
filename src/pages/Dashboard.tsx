@@ -763,7 +763,7 @@ const Dashboard = () => {
                     <ul className="text-xs text-muted-foreground space-y-1">
                       <li>• Share your referral link with friends and family</li>
                       <li>• They sign up using your link</li>
-                      <li>• Earn rewards when they make their first investment</li>
+                      <li>• Earn a withdrawable bonus  equivalent to 35% of your referee 1st deposit.</li>
                       <li>• Track your referrals and earnings in real-time</li>
                     </ul>
                   </div>
@@ -939,8 +939,8 @@ const Dashboard = () => {
                   maxInvestment: "$499",
                   roi: "9.8%",
                   frequency: "Daily",
-                  duration: "Weekly Trial",
-                  badge: "Weekly Trial",
+                  duration: "Daily Trial",
+                  badge: "Daily Trial",
                   badgeColor: "bg-blue-500",
                   popular: false
                 },
@@ -1010,9 +1010,9 @@ const Dashboard = () => {
                   minInvestment: "$40,000",
                   maxInvestment: "$90,000",
                   roi: "35%",
-                  frequency: "Hourly",
+                  frequency: "Weekly Trail",
                   duration: "30 days",
-                  badge: "Hourly",
+                  badge: "Weekly Trail",
                   badgeColor: "bg-purple-500",
                   popular: false
                 },

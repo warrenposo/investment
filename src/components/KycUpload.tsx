@@ -19,7 +19,6 @@ const KycUpload: React.FC<KycUploadProps> = ({ userId, onComplete }) => {
     id_front?: File
     id_back?: File
     selfie?: File
-    proof_of_address?: File
   }>({})
   
   const [uploading, setUploading] = useState(false)
@@ -51,14 +50,6 @@ const KycUpload: React.FC<KycUploadProps> = ({ userId, onComplete }) => {
       icon: <Camera className="w-6 h-6" />,
       acceptedTypes: 'image/*',
       required: true
-    },
-    {
-      key: 'proof_of_address' as const,
-      title: 'Proof of Address',
-      description: 'Upload a recent utility bill or bank statement (not older than 3 months)',
-      icon: <FileText className="w-6 h-6" />,
-      acceptedTypes: 'image/*,.pdf',
-      required: false
     }
   ]
 
@@ -110,7 +101,7 @@ const KycUpload: React.FC<KycUploadProps> = ({ userId, onComplete }) => {
             console.log(`Attempting to upload ${type} for user ${userId}:`, file.name)
             const result = await SupabaseService.uploadKycDocument(
               userId,
-              type as 'id_front' | 'id_back' | 'selfie' | 'proof_of_address',
+              type as 'id_front' | 'id_back' | 'selfie',
               file
             )
             console.log(`Successfully uploaded ${type}:`, result)

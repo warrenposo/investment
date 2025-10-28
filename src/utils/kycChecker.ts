@@ -8,7 +8,6 @@ export interface KycStatus {
     id_front: boolean
     id_back: boolean
     selfie: boolean
-    proof_of_address: boolean
   }
 }
 
@@ -28,8 +27,7 @@ export class KycChecker {
       const documentStatus = {
         id_front: documents.some(doc => doc.document_type === 'id_front'),
         id_back: documents.some(doc => doc.document_type === 'id_back'),
-        selfie: documents.some(doc => doc.document_type === 'selfie'),
-        proof_of_address: documents.some(doc => doc.document_type === 'proof_of_address')
+        selfie: documents.some(doc => doc.document_type === 'selfie')
       };
 
       // Determine if user can deposit
@@ -66,8 +64,7 @@ export class KycChecker {
         documents: {
           id_front: false,
           id_back: false,
-          selfie: false,
-          proof_of_address: false
+          selfie: false
         }
       };
     }

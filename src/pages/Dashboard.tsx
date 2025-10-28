@@ -86,8 +86,7 @@ const Dashboard = () => {
     documents: {
       id_front: false,
       id_back: false,
-      selfie: false,
-      proof_of_address: false
+      selfie: false
     }
   });
   const [settingsData, setSettingsData] = useState({

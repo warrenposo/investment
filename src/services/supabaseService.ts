@@ -26,7 +26,8 @@ export class SupabaseService {
       email,
       password,
       options: {
-        data: metadata
+        data: metadata,
+        emailRedirectTo: `${window.location.origin}/signin`
       }
     })
 
@@ -82,7 +83,7 @@ export class SupabaseService {
   // KYC Document methods
   static async uploadKycDocument(
     userId: string,
-    documentType: 'id_front' | 'id_back' | 'selfie' | 'proof_of_address',
+    documentType: 'id_front' | 'id_back' | 'selfie',
     file: File
   ) {
     // Upload file to Supabase Storage
